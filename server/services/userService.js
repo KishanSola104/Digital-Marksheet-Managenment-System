@@ -8,11 +8,10 @@ const addUser = async (userData) =>{
         const user = new userModel(userData);
         user.employeeId = data.employee._id;
         user.userId = data.employee.employeeId;
+        // console.log(data.employee.password);
         const verify = await bcrypt.compare(userData.password, data.employee.password)
         
         if(verify === true){
-            user.hashPassword= data.employee.password;
-            console.log(user);
             await user.save();
             return {
                 message : "User Added"
@@ -23,12 +22,10 @@ const addUser = async (userData) =>{
                 message : "Password Incorrect"
             }
         }
-        
-        
     }
     catch(error){
         return {
-            message : "UserName not Found"
+            message : error
         };
     }
 };

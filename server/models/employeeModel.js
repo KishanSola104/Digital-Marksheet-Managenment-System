@@ -32,7 +32,7 @@ const employeeSchema = new mongoose.Schema(
         
         salary: {type:Number, required:true},
         
-        status: {type:String, enum: ["Active", "Inactive", "Active But Unavailable"], default:"Active"}
+        status: {type:Boolean, default:true}
     },
     {
         timestamps:true

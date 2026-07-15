@@ -58,8 +58,8 @@ const getEmployeeByName = async (req,res) => {
 const deletebyName = async (req,res)=>{
     try{
         const employee = await employeeService.deletebyName(req.params.name);
-        res.status(201).json({
-            success:true,
+        res.status(200).json({
+            messsage:"Deleted",
         });
     }catch(error){
         res.status(400).json({

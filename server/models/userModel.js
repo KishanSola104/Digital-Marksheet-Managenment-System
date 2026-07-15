@@ -7,10 +7,8 @@ const userSchema = new mongoose.Schema(
         userName : {type:String, require:true},
         
         employeeId: {type:mongoose.Schema.Types.ObjectId, ref: "Employee", required:true, unique:true},
-
-        hashPassword: {type:String, required:true},
         
-        isActive: {type:Boolean, default: true},
+        status: {type:String, enum: ["Active", "Inactive", "Active But Unavailable"], default: "Active"},
     },
     {
         timestamps: true
