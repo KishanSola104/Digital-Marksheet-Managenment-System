@@ -50,10 +50,24 @@ const getEmployeeByName = async (req,res) => {
         });
     }catch(error){
         res.status(400).json({
+            
         });
     }
 };
 
+const deletebyName = async (req,res)=>{
+    try{
+        const employee = await employeeService.deletebyName(req.params.name);
+        res.status(201).json({
+            success:true,
+        });
+    }catch(error){
+        res.status(400).json({
+            
+        });
+    }
+}
+
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName
+    createEmployee, getEmployee, getEmployeeById, getEmployeeByName,deletebyName
 };
