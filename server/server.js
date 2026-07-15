@@ -2,20 +2,26 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 const app = express();
-// Global Middlewares MUST come first
-
+const employeeRoute = require('./routes/employeeRoute');
 app.use(cors());
 app.use(express.json());
+//DB Connection
+connectDB();
+
+
 
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
-// Fallback Test Route
-app.get('/test', (req, res) => res.json({ status: "API is online" }));
-const PORT = process.env.PORT || 5000;
+
+//Routes
+app.use('/employees', employeeRoute);
+
+
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} http://localhost:${PORT}`);
-});
+    console.log(`Server is running on port ${PORT} http://localhost:${PORT}`)});
