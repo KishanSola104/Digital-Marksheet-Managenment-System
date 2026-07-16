@@ -1,5 +1,6 @@
 const employeeService = require('../services/employeeService');
 
+//Create Employee
 const createEmployee = async (req, res) => {
     try {
         const employee = await employeeService.createEmployee(req.body);
@@ -15,6 +16,8 @@ const createEmployee = async (req, res) => {
     }
 };
 
+
+//Fetch All
 const getEmployee = async (req,res) => {
     try{
         const employee = await employeeService.getEmployee();
@@ -28,6 +31,7 @@ const getEmployee = async (req,res) => {
     }
 };
 
+//Fetch By Id
 const getEmployeeById = async (req,res) => {
     try{
         const employee = await employeeService.getEmployeeById(req.params.id);
@@ -41,6 +45,7 @@ const getEmployeeById = async (req,res) => {
     }
 };
 
+//Fetch By Name
 const getEmployeeByName = async (req,res) => {
     try{
         const employee = await employeeService.getEmployeeByName(req.params.name);
@@ -50,10 +55,12 @@ const getEmployeeByName = async (req,res) => {
         });
     }catch(error){
         res.status(400).json({
+            
         });
     }
 };
 
+//Update By Id
 const updateEmployeeById = async (req,res) => {
     try{
         const updateEmployee = await employeeService.updateEmployeeById(req.params.id,req.body);
@@ -65,8 +72,22 @@ const updateEmployeeById = async (req,res) => {
         res.status(400).json({
         });
     }
-}
+};
+
+//Delete By Name
+const deletebyName = async (req,res)=>{
+    try{
+        const employee = await employeeService.deletebyName(req.params.name);
+        res.status(200).json({
+            messsage:"Deleted Successfully",
+        });
+    }catch(error){
+        res.status(400).json({
+            
+        });
+    }
+};
 
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById
+    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deletebyName
 };
