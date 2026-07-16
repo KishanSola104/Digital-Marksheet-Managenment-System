@@ -54,8 +54,7 @@ const getEmployeeByName = async (req,res) => {
             data: employee
         });
     }catch(error){
-        res.status(400).json({
-            
+        res.status(400).json({ 
         });
     }
 };
@@ -102,7 +101,8 @@ const statusChangeById = async (req,res) => {
         res.status(400).json({
         });
     }
-}
+};
+
 module.exports = {
     createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deletebyName, statusChangeById
 };

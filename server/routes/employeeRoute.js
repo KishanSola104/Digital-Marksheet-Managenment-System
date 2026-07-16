@@ -7,7 +7,7 @@ router.post('/', employeeController.createEmployee);
 
 router.get('/', employeeController.getEmployee);
 
-router.get('/:id', employeeController.getEmployeeById);
+router.get('/get/:id', employeeController.getEmployeeById);
 
 router.get('/getByName/:name', employeeController.getEmployeeByName);
 
