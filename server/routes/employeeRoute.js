@@ -15,4 +15,6 @@ router.put('/update/:id', employeeController.updateEmployeeById);
 
 router.delete('/delete/:name',employeeController.deletebyName);
 
+router.patch('/status/:id',employeeController.statusChangeById);
+
 module.exports = router;

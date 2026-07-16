@@ -75,7 +75,7 @@ const updateEmployeeById = async (req,res) => {
 };
 
 //Delete By Name
-const deletebyName = async (req,res)=>{
+const deletebyName = async (req,res) => {
     try{
         const employee = await employeeService.deletebyName(req.params.name);
         res.status(200).json({
@@ -88,6 +88,21 @@ const deletebyName = async (req,res)=>{
     }
 };
 
+//Status Change Active or Deactive
+const statusChangeById = async (req,res) => { 
+    try{
+        const employee = await employeeService.statusChangeById(
+            req.params.id,
+            req.body.status
+        );
+        res.status(201).json({
+            message:"Status Changed",
+        });
+    }catch(error){
+        res.status(400).json({
+        });
+    }
+}
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deletebyName
+    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deletebyName, statusChangeById
 };

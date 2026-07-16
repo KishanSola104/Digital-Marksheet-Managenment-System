@@ -1,4 +1,5 @@
 
+const { statusChangeById } = require('../controllers/employeeController');
 const employeeModel = require('../models/employeeModel');
 const bcrypt = require("bcrypt");
 
@@ -89,7 +90,7 @@ const employeeService = {
     },
 
     //Delete By Name
-    deletebyName : async(name)=>{
+    deletebyName : async(name) => {
         try{
             
             const employee = await employeeModel.deleteOne({firstName:name});
@@ -101,6 +102,24 @@ const employeeService = {
             };
         }catch(error){
             throw new Error(`Error While Fetching Employee: ${error.message}`);
+        }
+    },
+
+    //Status Change Active or Deactive
+    statusChangeById : async(id,status) => {
+        try{
+            const employee = await employeeModel.updateOne(
+                {employeeId: id},
+                {$set:{status: status}}
+            );
+            if(!employee){
+                throw new Error("Employee Not Found");
+            }
+            return{
+                message: "Employee Status Changed Successfully"
+            };
+        }catch(error){
+            throw new Error(`Error Changing Status: ${error.message}`);
         }
     }
 };
