@@ -42,7 +42,7 @@ const employeeService = {
         }
     },
 
-    getEmployeeById: async (name) => {
+    getEmployeeByName: async (name) => {
         try{
             const employee = await employeeModel.findOne({firstName:name});
             if(!employee){
@@ -54,6 +54,26 @@ const employeeService = {
             };
         }catch(error){
             throw new Error(`Error While Fetching Employee: ${error.message}`);
+        }
+    },
+
+    updateEmployeeById: async (id,updateData) => {
+        try{
+            const employee = await employeeModel.updateOne(
+                {employeeId:id},
+                {$set:updateData}
+            );
+            if(!employee){
+                throw new Error("Employee Not Found");
+            }
+
+            //const updatedEmployee = await employeeModel.findOne({employeeId:id});
+            return{
+                message:"Employee Updated Successfully"
+                //employee:updatedEmployee
+            };
+        }catch(error){
+            throw new Error(`Error While Updating Employee: ${error.message}`);
         }
     }
 };

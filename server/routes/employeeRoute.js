@@ -11,5 +11,7 @@ router.get('/get/:id', employeeController.getEmployeeById);
 
 router.get('get/:name', employeeController.getEmployeeByName);
 
+router.put('/update/:id', employeeController.updateEmployeeById);
+
 
 module.exports = router;

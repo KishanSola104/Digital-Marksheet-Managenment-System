@@ -54,6 +54,19 @@ const getEmployeeByName = async (req,res) => {
     }
 };
 
+const updateEmployeeById = async (req,res) => {
+    try{
+        const updateEmployee = await employeeService.updateEmployeeById(req.params.id,req.body);
+        res.status(201).json({
+            success:true,
+            data: updateEmployee
+        });
+    }catch(error){
+        res.status(400).json({
+        });
+    }
+}
+
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName
+    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById
 };
