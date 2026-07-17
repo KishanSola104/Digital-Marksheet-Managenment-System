@@ -1,20 +1,36 @@
-import React from 'react';
-import {BrowserRouter,Routes, Route} from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
-import SignUpForm from '../pages/auth/SignUpForm';
-import LoginForm from '../pages/auth/LoginForm';
-import HomePage from '../pages/HomePage';
-
+import HomePage from "../pages/HomePage";
+import Login from "../pages/auth/Login";
+import NotFound from "../components/common/NotFound";
 
 function AppRoutes() {
     return (
-        <>
-            <Routes>
-                <Route path="/signup" element={<SignUpForm />} />
-                <Route path="/login" element={<LoginForm />} />
-                <Route path="/" element={<HomePage />} />
-            </Routes>
-        </>
+        <Routes>
+
+            {/* Public Routes */}
+
+            <Route
+                path="/"
+                element={<HomePage />}
+            />
+
+            <Route
+                path="/login"
+                element={<Login />}
+            />
+
+            {/* Protected Dashboard Routes */}
+            {/* We'll add them after creating dashboard pages */}
+
+            {/* 404 */}
+
+            <Route
+                path="*"
+                element={<NotFound />}
+            />
+
+        </Routes>
     );
 }
 
