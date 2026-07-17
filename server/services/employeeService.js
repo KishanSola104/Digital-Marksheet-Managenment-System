@@ -24,104 +24,128 @@ const employeeService = {
     //Get All Employee
     getEmployee: async () => {
         try {
-            
+
             const employees = await employeeModel.find();
-            return{
-                message:"Employees Fetched",
-                employees:employees
+            return {
+                message: "Employees Fetched",
+                employees: employees
             };
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error Fetching: ${error.message}`);
         }
     },
 
     //Get by Id
     getEmployeeById: async (id) => {
-        try{
-            const employee = await employeeModel.findOne({employeeId:id});
-            if(!employee){
+        try {
+            const employee = await employeeModel.findOne({ employeeId: id });
+            if (!employee) {
                 throw new Error("Employee Not Found");
             }
-            return{
-                message:"Employee Fetched",
+            return {
+                message: "Employee Fetched",
                 employee: employee
             };
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error While Fetching Employee: ${error.message}`);
         }
     },
 
     //Get by Name
     getEmployeeByName: async (name) => {
-        try{
-            
-            const employee = await employeeModel.findOne({firstName:name});
-            if(!employee){
+        try {
+
+            const employee = await employeeModel.findOne({ firstName: name });
+            if (!employee) {
                 throw new Error("Employee Not Found");
             }
-            return{
-                message:"Employee Fetched",
+            return {
+                message: "Employee Fetched",
                 employee: employee
             };
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error While Fetching Employee: ${error.message}`);
         }
     },
 
     //Update by Id
-    updateEmployeeById: async (id,updateData) => {
-        try{
+    updateEmployeeById: async (id, updateData) => {
+        try {
             const employee = await employeeModel.updateOne(
-                {employeeId:id},
-                {$set:updateData}
+                { employeeId: id },
+                { $set: updateData }
             );
-            if(!employee){
+            if (!employee) {
                 throw new Error("Employee Not Found");
             }
 
             //const updatedEmployee = await employeeModel.findOne({employeeId:id});
-            return{
-                message:"Employee Updated Successfully"
+            return {
+                message: "Employee Updated Successfully"
                 //employee:updatedEmployee
             };
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error While Updating Employee: ${error.message}`);
         }
     },
 
-    //Delete By Name
-    deletebyName : async(name) => {
-        try{
-            
-            const employee = await employeeModel.deleteOne({firstName:name});
-            if(!employee){
+    //Delete By Id
+    deleteById: async (id) => {
+        try {
+    
+            const employee = await employeeModel.findOneAndDelete({
+                employeeId: id
+            });
+    
+            if (!employee) {
                 throw new Error("Employee Not Found");
             }
-            return{
-                message:"Employee Deleted Successfully",
+    
+            return {
+                message: "Employee Deleted Successfully"
             };
-        }catch(error){
-            throw new Error(`Error While Fetching Employee: ${error.message}`);
+    
+        } catch (error) {
+            throw new Error(`Error While Deleting Employee: ${error.message}`);
         }
     },
 
     //Status Change Active or Deactive
-    statusChangeById : async(id,status) => {
-        try{
+    statusChangeById: async (id, status) => {
+        try {
             const employee = await employeeModel.updateOne(
-                {employeeId: id},
-                {$set:{status: status}}
+                { employeeId: id },
+                { $set: { status: status } }
             );
-            if(!employee){
+            if (!employee) {
                 throw new Error("Employee Not Found");
             }
-            return{
+            return {
                 message: "Employee Status Changed Successfully"
             };
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error Changing Status: ${error.message}`);
         }
-    }
+    },
+    // Get Employee By Email
+    getEmployeeByEmail: async (email) => {
+        try {
+            const employee = await employeeModel.findOne({ email });
+
+            if (!employee) {
+                throw new Error("Employee Not Found");
+            }
+
+            return {
+                message: "Employee Fetched",
+                employee: employee
+            };
+        } catch (error) {
+            throw new Error(`Error While Fetching Employee: ${error.message}`);
+        }
+    },
+
 };
+
 
 module.exports = employeeService;

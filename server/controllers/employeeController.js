@@ -73,16 +73,18 @@ const updateEmployeeById = async (req,res) => {
     }
 };
 
-//Delete By Name
-const deletebyName = async (req,res) => {
-    try{
-        const employee = await employeeService.deletebyName(req.params.name);
+//Delete By Id
+const deleteById = async (req, res) => {
+    try {
+        const result = await employeeService.deleteById(req.params.id);
+
         res.status(200).json({
-            messsage:"Deleted Successfully",
+            message: result.message
         });
-    }catch(error){
+
+    } catch (error) {
         res.status(400).json({
-            
+            message: error.message
         });
     }
 };
@@ -104,5 +106,5 @@ const statusChangeById = async (req,res) => {
 };
 
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deletebyName, statusChangeById
+    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deleteById, statusChangeById
 };

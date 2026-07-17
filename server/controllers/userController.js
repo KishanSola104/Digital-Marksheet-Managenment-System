@@ -1,16 +1,18 @@
 const userService = require('../services/userService');
 
-const addUser = async (req,res)=>{
-    try{
-        const data = await userService.addUser(req.body);
+const login = async (req, res) => {
+    try {
+        const data = await userService.login(req.body);
         res.status(200).json({
-            data : data
-        })
-    }catch(err){
-        res.status(400).json({  
-            error:err
+            data: data
         })
     }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+
 }
 
-module.exports = {addUser}
+module.exports = { login }

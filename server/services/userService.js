@@ -1,34 +1,79 @@
-const userModel = require("../models/userModel");
-const employeeService = require('../services/employeeService');
+const User = require("../models/userModel");
+const employeeService = require("./employeeService");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const addUser = async (userData) =>{
-    try{
-        const data = await employeeService.getEmployeeByName(userData.userName);
-        const user = new userModel(userData);
-        user.employeeId = data.employee._id;
-        user.userId = data.employee.employeeId;
-        // console.log(data.employee.password);
-        const verify = await bcrypt.compare(userData.password, data.employee.password)
-        
-        if(verify === true){
+const login = async (loginData) => {
+    try {
+        const { email, password } = loginData;
+        const data = await employeeService.getEmployeeByEmail(email);
+
+        if (!data || !data.employee) {
+            return {
+                success: false,
+                message: "Invalid Email"
+            };
+        }
+
+        const employee = data.employee;
+
+
+        const isMatch = await bcrypt.compare(password, employee.password);
+
+        if (!isMatch) {
+            return {
+                success: false,
+                message: "Invalid Password"
+            };
+        }
+
+        let user = await User.findOne({
+            employeeId: employee._id
+        });
+
+
+        if (!user) {
+            user = await User.create({
+                userName: employee.firstName,
+                employeeId: employee._id,
+                userId: employee.employeeId,
+                status: "Active"
+            });
+        } else {
+            user.status = "Active";
             await user.save();
-            return {
-                message : "User Added"
-            }
         }
-        else{
-            return {
-                message : "Password Incorrect"
+
+        const token = jwt.sign(
+            {
+                employeeId: employee.employeeId,
+                email: employee.email,
+                designation: employee.designation
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "8h"
             }
-        }
-    }
-    catch(error){
+        );
+
         return {
-            message : error
+            success: true,
+            message: "Login Successful",
+            token,
+            user: {
+                id: user._id,
+                userName: user.userName,
+                employeeId: employee.employeeId,
+                designation: employee.designation,
+                status: user.status
+            }
         };
+
+    } catch (error) {
+        throw error;
     }
 };
 
-
-module.exports = {addUser}
+module.exports = {
+    login
+};
