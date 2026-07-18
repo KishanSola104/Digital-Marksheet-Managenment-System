@@ -2,27 +2,21 @@ import { useMemo, useState } from "react";
 
 import DashboardShell from "./DashboardShell";
 
-import adminMenu from "../menus/adminMenu";
-import headTeacherMenu from "../menus/headTeacherMenu";
-import classTeacherMenu from "../menus/classTeacherMenu";
-import subjectTeacherMenu from "../menus/subjectTeacherMenu";
+import adminMenu from "../config/menus/adminMenu";
+import headTeacherMenu from "../config/menus/headTeacherMenu";
+import classTeacherMenu from "../config/menus/classTeacherMenu";
+import subjectTeacherMenu from "../config/menus/subjectTeacherMenu";
+
+import useAuth from "../hooks/useAuth";
 
 function DashboardLayout() {
-
     /*
     ---------------------------------------------------
-    Temporary User
-    Later this will come from Context / Redux / API
+    Authentication
     ---------------------------------------------------
     */
 
-    const [user] = useState({
-        id: 1,
-        name: "Kishan Solanki",
-        role: "admin",
-        employeeId: "ADMIN-001",
-        avatar: "",
-    });
+    const { user } = useAuth();
 
     /*
     ---------------------------------------------------
@@ -30,7 +24,11 @@ function DashboardLayout() {
     ---------------------------------------------------
     */
 
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    // Desktop collapse
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+    // Mobile drawer
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
     /*
     ---------------------------------------------------
@@ -50,80 +48,50 @@ function DashboardLayout() {
 
     /*
     ---------------------------------------------------
-    Select Sidebar Menu
+    Sidebar Menu
     ---------------------------------------------------
     */
 
     const menu = useMemo(() => {
 
-        switch (user.role) {
+        switch (user?.designation) {
 
-            case "admin":
+            case "ADMIN":
                 return adminMenu;
 
-            case "head_teacher":
+            case "HEAD":
                 return headTeacherMenu;
 
-            case "class_teacher":
+            case "CLASS_TEACHER":
                 return classTeacherMenu;
 
-            case "subject_teacher":
+            case "SUBJECT_TEACHER":
                 return subjectTeacherMenu;
 
             default:
                 return [];
+
         }
 
-    }, [user.role]);
-
-    /*
-    ---------------------------------------------------
-    Logout
-    ---------------------------------------------------
-    */
-
-    function handleLogout() {
-
-        console.log("Logout");
-
-        /*
-            Later
-
-            Remove JWT
-
-            Clear Context
-
-            Navigate("/login")
-        */
-
-    }
+    }, [user?.designation]);
 
     return (
-
         <DashboardShell
-
-            user={user}
-
             menu={menu}
 
-            sidebarOpen={sidebarOpen}
+            isSidebarCollapsed={isSidebarCollapsed}
+            setIsSidebarCollapsed={setIsSidebarCollapsed}
 
-            setSidebarOpen={setSidebarOpen}
+            isMobileSidebarOpen={isMobileSidebarOpen}
+            setIsMobileSidebarOpen={setIsMobileSidebarOpen}
 
             academicYear={academicYear}
-
             academicYears={academicYears}
-
             onAcademicYearChange={(e) =>
                 setAcademicYear(e.target.value)
             }
-
-            onLogout={handleLogout}
-
         />
-
     );
-
 }
 
 export default DashboardLayout;

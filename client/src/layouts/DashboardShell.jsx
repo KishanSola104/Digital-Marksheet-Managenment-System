@@ -1,45 +1,79 @@
 import { Outlet } from "react-router-dom";
 
-import Sidebar from "./Sidebar";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import PageContainer from "./PageContainer";
+import Sidebar from "../components/layout/Sidebar";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
+import PageContainer from "../components/layout/PageContainer";
 
 function DashboardShell({
-    user,
     menu,
-    sidebarOpen,
-    setSidebarOpen,
+
+    isSidebarCollapsed,
+    setIsSidebarCollapsed,
+
+    isMobileSidebarOpen,
+    setIsMobileSidebarOpen,
+
     academicYear,
     academicYears,
     onAcademicYearChange,
-    onLogout,
 }) {
     return (
-        <div className="flex h-screen bg-slate-50">
+        <div className="flex min-h-screen bg-slate-50">
+
+            {/* Mobile Overlay */}
+
+            {isMobileSidebarOpen && (
+                <div
+                    className="
+                        fixed
+                        inset-0
+                        z-40
+                        bg-black/50
+                        lg:hidden
+                    "
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                />
+            )}
 
             {/* Sidebar */}
 
             <Sidebar
-                user={user}
                 menu={menu}
-                isCollapsed={!sidebarOpen}
-                onLogout={onLogout}
+                isCollapsed={isSidebarCollapsed}
+                isMobileOpen={isMobileSidebarOpen}
+                closeMobileSidebar={() =>
+                    setIsMobileSidebarOpen(false)
+                }
             />
 
             {/* Main Content */}
 
-            <div className="flex flex-1 flex-col overflow-hidden">
+            <div
+    className={`
+        flex
+        min-w-0
+        flex-1
+        flex-col
+        transition-all
+        duration-300
+        ${isSidebarCollapsed ? "lg:ml-20" : "lg:ml-72"}
+    `}
+>
 
                 <Navbar
-                    user={user}
                     academicYear={academicYear}
                     academicYears={academicYears}
                     onAcademicYearChange={onAcademicYearChange}
-                    onSidebarToggle={() =>
-                        setSidebarOpen((prev) => !prev)
-                    }
-                    onLogout={onLogout}
+                    onSidebarToggle={() => {
+
+                        if (window.innerWidth >= 1024) {
+                            setIsSidebarCollapsed((prev) => !prev);
+                        } else {
+                            setIsMobileSidebarOpen((prev) => !prev);
+                        }
+
+                    }}
                 />
 
                 <PageContainer>

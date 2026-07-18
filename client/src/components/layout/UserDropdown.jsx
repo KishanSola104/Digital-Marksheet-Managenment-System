@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import {
     ChevronDown,
     User,
@@ -6,14 +7,33 @@ import {
     LogOut,
 } from "lucide-react";
 
-function UserDropdown({
-    user,
-    onLogout,
-}) {
+import useAuth from "../../hooks/useAuth";
+
+function UserDropdown() {
+
+    /*
+    ---------------------------------------------------
+    Authentication
+    ---------------------------------------------------
+    */
+
+    const { user, logout, basePath } = useAuth();
+
+    /*
+    ---------------------------------------------------
+    State
+    ---------------------------------------------------
+    */
 
     const [isOpen, setIsOpen] = useState(false);
 
     const dropdownRef = useRef(null);
+
+    /*
+    ---------------------------------------------------
+    Close Dropdown on Outside Click
+    ---------------------------------------------------
+    */
 
     useEffect(() => {
 
@@ -34,13 +54,29 @@ function UserDropdown({
         );
 
         return () => {
+
             document.removeEventListener(
                 "mousedown",
                 handleClickOutside
             );
+
         };
 
     }, []);
+
+    /*
+    ---------------------------------------------------
+    Logout
+    ---------------------------------------------------
+    */
+
+    function handleLogout() {
+
+        setIsOpen(false);
+
+        logout();
+
+    }
 
     return (
 
@@ -49,8 +85,10 @@ function UserDropdown({
             className="relative"
         >
 
+            {/* User Button */}
+
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsOpen((prev) => !prev)}
                 className="
                     flex
                     items-center
@@ -63,30 +101,34 @@ function UserDropdown({
                 "
             >
 
-                <div className="
-                    flex
-                    h-10
-                    w-10
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-blue-600
-                    font-semibold
-                    text-white
-                ">
+                {/* Avatar */}
 
-                    {user?.name?.charAt(0)}
-
+                <div
+                    className="
+                        flex
+                        h-10
+                        w-10
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-blue-600
+                        font-semibold
+                        text-white
+                    "
+                >
+                    {user?.userName?.[0]?.toUpperCase() || "U"}
                 </div>
+
+                {/* User Info */}
 
                 <div className="hidden text-left md:block">
 
                     <p className="text-sm font-semibold text-slate-800">
-                        {user?.name}
+                        {user?.userName}
                     </p>
 
                     <p className="text-xs text-slate-500">
-                        {user?.role}
+                        {user?.designation}
                     </p>
 
                 </div>
@@ -99,6 +141,8 @@ function UserDropdown({
                 />
 
             </button>
+
+            {/* Dropdown */}
 
             {isOpen && (
 
@@ -117,42 +161,42 @@ function UserDropdown({
                     "
                 >
 
-                    <button
+                    <Link
+                        to={`${basePath}/profile`}
                         className="
                             flex
-                            w-full
                             items-center
                             gap-3
                             px-4
                             py-3
                             hover:bg-slate-100
                         "
+                        onClick={() => setIsOpen(false)}
                     >
                         <User size={18} />
-
                         My Profile
-                    </button>
+                    </Link>
 
-                    <button
+                    <Link
+                        to={`${basePath}/change-password`}
                         className="
                             flex
-                            w-full
                             items-center
                             gap-3
                             px-4
                             py-3
                             hover:bg-slate-100
                         "
+                        onClick={() => setIsOpen(false)}
                     >
                         <KeyRound size={18} />
-
                         Change Password
-                    </button>
+                    </Link>
 
                     <hr />
 
                     <button
-                        onClick={onLogout}
+                        onClick={handleLogout}
                         className="
                             flex
                             w-full
@@ -161,11 +205,11 @@ function UserDropdown({
                             px-4
                             py-3
                             text-red-600
+                            transition
                             hover:bg-red-50
                         "
                     >
                         <LogOut size={18} />
-
                         Logout
                     </button>
 
@@ -176,6 +220,7 @@ function UserDropdown({
         </div>
 
     );
+
 }
 
 export default UserDropdown;

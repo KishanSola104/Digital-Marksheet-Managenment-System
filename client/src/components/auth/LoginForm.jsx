@@ -7,12 +7,19 @@ import { Input, FormField } from "../ui/SearchInput";
 import RoleSelect from "./RoleSelect";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 
+import { useNavigate } from "react-router-dom";
+
+import { loginUser } from "../../services/authService";
+import useAuth from "../../hooks/useAuth";
+
+import { ROLE_BASE_PATHS } from "../../config/paths";
+
 function LoginForm() {
   const [role, setRole] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [rememberMe, setRememberMe] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,29 +51,30 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      /*
-      Later
-
-      const res = await loginUser({
-          role,
-          email,
-          password,
-          rememberMe
-      });
-
-      login(res.user);
-      */
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log({
-        role,
+      const response = await loginUser({
         email,
         password,
-        rememberMe,
       });
+
+      if (response.token && response.user) {
+        login(response.user, response.token);
+
+        const dashboardPath = ROLE_BASE_PATHS[response.user.designation] || "/";
+
+        navigate(dashboardPath, { replace: true });
+      } else if (response.data?.token && response.data?.user) {
+        login(response.data.user, response.data.token);
+
+        const dashboardPath =
+          ROLE_BASE_PATHS[response.data.user.designation] || "/";
+
+        navigate(dashboardPath, { replace: true });
+      } else {
+        throw new Error("Invalid login response received from server.");
+      }
     } catch (err) {
-      setError("Invalid email or password.");
+      console.error(err);
+      setError(err.message || "Unable to login.");
     } finally {
       setLoading(false);
     }

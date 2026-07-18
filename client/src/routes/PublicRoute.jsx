@@ -1,17 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
-
 import useAuth from "../hooks/useAuth";
 
-function ProtectedRoute({ allowedRoles = [] }) {
+function PublicRoute() {
     const {
-        user,
         loading,
         isAuthenticated,
+        basePath,
     } = useAuth();
 
     /*
     -----------------------------------------
-    Wait Until Session Is Restored
+    Wait Until Session Restores
     -----------------------------------------
     */
 
@@ -25,34 +24,15 @@ function ProtectedRoute({ allowedRoles = [] }) {
 
     /*
     -----------------------------------------
-    Not Logged In
+    Already Logged In
     -----------------------------------------
     */
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+    if (isAuthenticated) {
+        return <Navigate to={`${basePath}/dashboard`} replace />;
     }
-
-    /*
-    -----------------------------------------
-    Unauthorized Role
-    -----------------------------------------
-    */
-
-    if (
-        allowedRoles.length > 0 &&
-        !allowedRoles.includes(user?.designation)
-    ) {
-        return <Navigate to="/" replace />;
-    }
-
-    /*
-    -----------------------------------------
-    Authorized
-    -----------------------------------------
-    */
 
     return <Outlet />;
 }
 
-export default ProtectedRoute;
+export default PublicRoute;

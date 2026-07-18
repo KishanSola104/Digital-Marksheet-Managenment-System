@@ -1,61 +1,85 @@
 import { Link } from "react-router-dom";
 
-function UserCard({
-    name = "Kishan Solanki",
-    role = "Administrator",
-    employeeId = "ADMIN-001",
-    avatar = "",
-}) {
+import useAuth from "../../hooks/useAuth";
+import { formatRole } from "../../utils/formatRole";
+
+function UserCard({ isCollapsed = false }) {
+    /*
+    -----------------------------------------
+    Authentication
+    -----------------------------------------
+    */
+
+    const { user, basePath } = useAuth();
+
+    // Temporary (remove after testing)
+    console.log("Logged In User :", user);
+
+    /*
+    -----------------------------------------
+    User Details
+    -----------------------------------------
+    */
+
+    const name = user?.userName || "Unknown User";
+    const employeeId = user?.employeeId || "";
+    const role = formatRole(user?.designation);
+    const avatar = user?.profileImage || "";
+
+    /*
+    -----------------------------------------
+    Avatar Initials
+    -----------------------------------------
+    */
 
     const initials = name
+        .trim()
         .split(" ")
-        .map((word) => word[0])
+        .map((word) => word.charAt(0))
         .join("")
         .substring(0, 2)
         .toUpperCase();
 
     return (
         <Link
-            to="/profile"
-            className="block rounded-xl transition-all duration-200 hover:bg-slate-800"
+            to={`${basePath}/profile`}
+            className="block rounded-xl transition hover:bg-slate-800"
         >
             <div className="flex items-center gap-3 p-3">
 
                 {/* Avatar */}
 
-                {
-                    avatar ? (
-                        <img
-                            src={avatar}
-                            alt={name}
-                            className="h-11 w-11 rounded-full object-cover"
-                        />
-                    ) : (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
+                {avatar ? (
+                    <img
+                        src={avatar}
+                        alt={name}
+                        className="h-11 w-11 rounded-full object-cover"
+                    />
+                ) : (
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 font-semibold text-white">
+                        {initials}
+                    </div>
+                )}
 
-                            {initials}
+                {!isCollapsed && (
+                    <div className="min-w-0 flex-1">
 
-                        </div>
-                    )
-                }
+                        <h3 className="truncate text-sm font-semibold text-white">
+                            {name}
+                        </h3>
 
-                {/* User Details */}
+                        {employeeId && (
+                            <p className="truncate text-xs text-slate-400">
+                                {employeeId}
+                            </p>
+                        )}
 
-                <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-medium text-blue-400">
+                            {role}
+                        </p>
 
-                    <h3 className="truncate text-sm font-semibold text-white">
-                        {name}
-                    </h3>
-
-                    <p className="truncate text-xs text-slate-400">
-                        {employeeId}
-                    </p>
-
-                    <p className="truncate text-xs text-blue-400">
-                        {role}
-                    </p>
-
-                </div>
+                    </div>
+                )}
 
             </div>
         </Link>
