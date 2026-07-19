@@ -9,7 +9,8 @@ const authorize = (...roles) => {
                 });
             }
 
-            if (!roles.includes(req.user.designation)) {
+            // Check user's role instead of designation
+            if (!roles.includes(req.user.role)) {
                 return res.status(403).json({
                     success: false,
                     message: "Access Denied"

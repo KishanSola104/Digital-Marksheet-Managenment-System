@@ -29,56 +29,76 @@ function LoginForm() {
 
   const [forgotPassword, setForgotPassword] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+ 
 
-    if (!role) {
-      setError("Please select your role.");
-      return;
-    }
+ const handleLogin = async (e) => {
+  e.preventDefault();
 
-    if (!email.trim()) {
-      setError("Please enter your email.");
-      return;
-    }
+  if (!role) {
+    setError("Please select your role.");
+    return;
+  }
 
-    if (!password.trim()) {
-      setError("Please enter your password.");
-      return;
-    }
+  if (!email.trim()) {
+    setError("Please enter your email.");
+    return;
+  }
 
-    setError("");
-    setLoading(true);
+  if (!password.trim()) {
+    setError("Please enter your password.");
+    return;
+  }
 
-    try {
-      const response = await loginUser({
-        email,
-        password,
-      });
+  setError("");
+  setLoading(true);
 
-      if (response.token && response.user) {
-        login(response.user, response.token);
+  try {
+    const response = await loginUser({
+      email,
+      password,
+    });
 
-        const dashboardPath = ROLE_BASE_PATHS[response.user.designation] || "/";
+    console.log("Full Response:", response);
+    console.log("User:", response.user);
+    console.log("Role:", response.user.role);
+    console.log("Dashboard Path:", ROLE_BASE_PATHS[response.user.role]);
 
-        navigate(dashboardPath, { replace: true });
-      } else if (response.data?.token && response.data?.user) {
-        login(response.data.user, response.data.token);
+    if (response.token && response.user) {
 
-        const dashboardPath =
-          ROLE_BASE_PATHS[response.data.user.designation] || "/";
-
-        navigate(dashboardPath, { replace: true });
-      } else {
-        throw new Error("Invalid login response received from server.");
+      if (response.user.role !== role) {
+        throw new Error("Selected role does not match your account.");
       }
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "Unable to login.");
-    } finally {
-      setLoading(false);
+
+      login(response.user, response.token);
+
+      const dashboardPath =
+        ROLE_BASE_PATHS[response.user.role] || "/";
+
+      navigate(dashboardPath, { replace: true });
+
+    } else if (response.data?.token && response.data?.user) {
+
+      if (response.data.user.role !== role) {
+        throw new Error("Selected role does not match your account.");
+      }
+
+      login(response.data.user, response.data.token);
+
+      const dashboardPath =
+        ROLE_BASE_PATHS[response.data.user.role] || "/";
+
+      navigate(dashboardPath, { replace: true });
+
+    } else {
+      throw new Error("Invalid login response received from server.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError(err.message || "Unable to login.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (forgotPassword) {
     return <ForgotPasswordForm onBack={() => setForgotPassword(false)} />;

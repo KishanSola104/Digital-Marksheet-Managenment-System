@@ -48,7 +48,7 @@ function Sidebar({
             {/* Header */}
 
             <SidebarHeader
-                role={user?.designation}
+                role={user?.role}
                 isCollapsed={isCollapsed}
             />
 

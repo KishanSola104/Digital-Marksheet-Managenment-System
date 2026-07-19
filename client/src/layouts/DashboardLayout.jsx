@@ -54,12 +54,12 @@ function DashboardLayout() {
 
     const menu = useMemo(() => {
 
-        switch (user?.designation) {
+        switch (user?.role) {
 
             case "ADMIN":
                 return adminMenu;
 
-            case "HEAD":
+            case "HEAD_TEACHER":
                 return headTeacherMenu;
 
             case "CLASS_TEACHER":

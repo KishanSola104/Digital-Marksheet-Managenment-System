@@ -141,7 +141,7 @@ const employeeService = {
                 employee: employee
             };
         } catch (error) {
-            throw new Error(`Error While Fetching Employee: ${error.message}`);
+            throw new Error(`Error: ${error.message}`);
         }
     },
 

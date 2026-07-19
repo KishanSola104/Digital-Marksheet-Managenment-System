@@ -23,7 +23,7 @@ function UserCard({ isCollapsed = false }) {
 
     const name = user?.userName || "Unknown User";
     const employeeId = user?.employeeId || "";
-    const role = formatRole(user?.designation);
+    const role = formatRole(user?.role);
     const avatar = user?.profileImage || "";
 
     /*

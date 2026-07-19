@@ -52,7 +52,7 @@ function AuthProvider({ children }) {
     const basePath = useMemo(() => {
         if (!user) return "";
 
-        return ROLE_BASE_PATHS[user.designation] || "";
+        return ROLE_BASE_PATHS[user.role] || "";
     }, [user]);
 
     /*

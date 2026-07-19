@@ -5,6 +5,7 @@ export const ROLE_BASE_PATHS = {
     [ROLES.HEAD_TEACHER]: "/head-teacher",
     [ROLES.CLASS_TEACHER]: "/class-teacher",
     [ROLES.SUBJECT_TEACHER]: "/subject-teacher",
+    [ROLES.OFFICE_STAFF]: "/office-staff",
 };
 
 export const ADMIN_PATHS = {
@@ -34,7 +35,7 @@ export const HEAD_TEACHER_PATHS = {
     EXAMS: "/head-teacher/exams",
     RESULTS: "/head-teacher/results",
     SETTINGS: "/head-teacher/settings",
-    PROFILE:"/head-teacher/profile"
+    PROFILE: "/head-teacher/profile",
 };
 
 export const CLASS_TEACHER_PATHS = {
@@ -44,7 +45,7 @@ export const CLASS_TEACHER_PATHS = {
     RESULTS: "/class-teacher/results",
     REPORT_CARD: "/class-teacher/report-card",
     SETTINGS: "/class-teacher/settings",
-    PROFILE:"/class-teacher/profile"
+    PROFILE: "/class-teacher/profile",
 };
 
 export const SUBJECT_TEACHER_PATHS = {
@@ -52,5 +53,14 @@ export const SUBJECT_TEACHER_PATHS = {
     MANAGE_MARKS: "/subject-teacher/manage-marks",
     RESULTS: "/subject-teacher/results",
     SETTINGS: "/subject-teacher/settings",
-    PROFILE:"/subject-teacher/profile"
+    PROFILE: "/subject-teacher/profile",
+};
+
+export const OFFICE_STAFF_PATHS = {
+    DASHBOARD: "/office-staff/dashboard",
+    STUDENTS: "/office-staff/students",
+    FEES: "/office-staff/fees",
+    CERTIFICATES: "/office-staff/certificates",
+    SETTINGS: "/office-staff/settings",
+    PROFILE: "/office-staff/profile",
 };

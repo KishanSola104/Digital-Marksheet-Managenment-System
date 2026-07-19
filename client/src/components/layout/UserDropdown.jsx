@@ -128,7 +128,7 @@ function UserDropdown() {
                     </p>
 
                     <p className="text-xs text-slate-500">
-                        {user?.designation}
+                        {user?.role}
                     </p>
 
                 </div>
