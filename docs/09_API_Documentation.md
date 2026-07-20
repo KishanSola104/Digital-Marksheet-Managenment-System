@@ -1,30 +1,59 @@
-Document every API.
-Example:
-POST
+1. Employees -> http://localhost:8000/employees -> post
 
-/login
-
-Purpose
-
-Authenticate user.
-
-Request
-
+->adding a employee
+request
 {
-employeeId,
-password
+  "employeeId": "EMP004",
+  "firstName": "Rahul",
+  "lastName": "Sharma",
+  "gender": "Male",
+  "dob": "1990-05-15",
+  "email": "rahul.sharma@example.com",
+  "mobileNumber": "9876543210",
+  "address": "12 MG Road, Ahmedabad, Gujarat",
+  "qualification": "M.Ed",
+  "experience": "8 Years",
+  "joiningDate": "2026-07-20",
+  "role": "HEAD_TEACHER",
+  "designation": "Principal",
+  "department": "Administration",
+  "salary": 75000,
+  "status": true
 }
 
-Response
-
+response
 {
-token,
-user
+    "success": true,
+    "data": {
+        "message": "Employee created successfully",
+        "employee": {
+            "employeeId": "EMP004",
+            "firstName": "Rahul",
+            "lastName": "Sharma",
+            "gender": "Male",
+            "dob": "1990-05-15T00:00:00.000Z",
+            "email": "rahul.sharma@example.com",
+            "mobileNumber": "9876543210",
+            "address": "12 MG Road, Ahmedabad, Gujarat",
+            "qualification": "M.Ed",
+            "experience": "8 Years",
+            "joiningDate": "2026-07-20T00:00:00.000Z",
+            "role": "HEAD_TEACHER",
+            "designation": "Principal",
+            "department": "Administration",
+            "salary": 75000,
+            "status": true,
+            "_id": "6a5e54ee18324d6f170d5a77",
+            "password": "$2b$10$YjAHR5eBaElByqedWtgHCuIjgrxvzNOnZ5zp5mdpP77VgXuvmV242",
+            "createdAt": "2026-07-20T17:03:42.251Z",
+            "updatedAt": "2026-07-20T17:03:42.251Z",
+            "__v": 0
+        }
+    }
 }
-Repeat for every endpoint
 
+2. login -> http://localhost:8000/login -> post
 
-2. login 
 login if pass match and user is in user collection
 -> if not in user collection password will be updated in employee collection
 request
