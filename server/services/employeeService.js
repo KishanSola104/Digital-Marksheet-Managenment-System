@@ -1,7 +1,12 @@
-
 const { statusChangeById } = require('../controllers/employeeController');
 const employeeModel = require('../models/employeeModel');
 const bcrypt = require("bcrypt");
+
+function generateFiveDigitNumber() {
+    const min = 10000; // smallest 5-digit number
+    const max = 99999; // largest 5-digit number
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 const employeeService = {
 
@@ -9,6 +14,10 @@ const employeeService = {
     createEmployee: async (employeeData) => {
         try {
             const employee = new employeeModel(employeeData);
+            if(employee.password === undefined){
+                employee.password = generateFiveDigitNumber();
+                // console.log(employee.password);
+            }
             const hashedPassword = await bcrypt.hash(employee.password, 10);
             employee.password = hashedPassword;
             await employee.save();

@@ -5,19 +5,26 @@ const jwt = require("jsonwebtoken");
 
 const login = async (loginData) => {
   try {
-    const { email, password } = loginData;
+    const { id, password, role } = loginData;
 
-    const data = await employeeService.getEmployeeByEmail(email);
+    const data = await employeeService.getEmployeeById(id);
 
     if (!data || !data.employee) {
       return {
         success: false,
-        message: "Invalid Email",
+        message: "Invalid id",
       };
     }
 
     const employee = data.employee;
 
+    const roleMatch = employee.role;
+    if(roleMatch !== role){
+      return{
+        success:false,
+        message:"Please Select the Designated role"
+      }
+    }
     const isMatch = await bcrypt.compare(password, employee.password);
 
     if (!isMatch) {
@@ -43,14 +50,11 @@ const login = async (loginData) => {
       await user.save();
     }
 
-    console.log("Employee Object:", employee);
-    console.log("Employee Role:", employee.role);
-
     // JWT Token
     const token = jwt.sign(
       {
         employeeId: employee.employeeId,
-        email: employee.email,
+        id: employee.id,
         role: employee.role,
       },
       process.env.JWT_SECRET,

@@ -6,8 +6,8 @@ const login = async (req, res) => {
         const data = await userService.login(req.body);
 
         res.status(200).json({
-            success: true,
-            message: "Login Successful",
+            success: data.success,
+            message: data.message,
             token: data.token,
             user: data.user
         });
