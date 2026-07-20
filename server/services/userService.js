@@ -12,80 +12,98 @@ const login = async (loginData) => {
     if (!data || !data.employee) {
       return {
         success: false,
-        message: "Invalid id",
+        message: "Invalid Employee ID",
       };
     }
 
     const employee = data.employee;
 
-    const roleMatch = employee.role;
-    if(roleMatch !== role){
-      return{
-        success:false,
-        message:"Please Select the Designated role"
-      }
-    }
-    const isMatch = await bcrypt.compare(password, employee.password);
 
-    if (!isMatch) {
+    if (employee.role !== role) {
       return {
         success: false,
-        message: "Invalid Password",
+        message: "Please select your designated role",
       };
     }
 
+  
     let user = await User.findOne({
       employeeId: employee._id,
     });
 
     if (!user) {
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      employee.password = hashedPassword;
+      await employee.save();
+
       user = await User.create({
+        userId: employee.employeeId,
         userName: employee.firstName,
         employeeId: employee._id,
-        userId: employee.employeeId,
         status: "Active",
       });
-    } else {
+      // console.log("Set Password");
+    }
+
+    else {
+
+      const isMatch = await bcrypt.compare(
+        password,
+        employee.password
+      );
+
+      if (!isMatch) {
+        return {
+          success: false,
+          message: "Invalid Password",
+        };
+      }
+
       user.status = "Active";
       await user.save();
     }
 
-    // JWT Token
+    // Generate JWT
     const token = jwt.sign(
       {
         employeeId: employee.employeeId,
-        id: employee.id,
+        id: employee._id,
         role: employee.role,
       },
       process.env.JWT_SECRET,
       {
         expiresIn: "8h",
-      },
+      }
     );
-
+    // console.log("No Set Password");
     return {
       success: true,
       message: "Login Successful",
       token,
       user: {
         id: user._id,
+        userId: user.userId,
         userName: user.userName,
-        employeeId: employee.employeeId,
 
-        // Authentication & Authorization
+        // Authentication
         role: employee.role,
 
         // Display Purpose
         designation: employee.designation,
+        department: employee.department,
 
         status: user.status,
       },
     };
+
   } catch (error) {
     throw error;
   }
 };
 
+
+
 module.exports = {
-  login,
+  login
 };
