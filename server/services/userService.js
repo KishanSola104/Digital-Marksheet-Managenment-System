@@ -5,7 +5,10 @@ const jwt = require("jsonwebtoken");
 
 const login = async (loginData) => {
   try {
-    const { id, password, role } = loginData;
+    const { id, password,cnfPass , role } = loginData;
+
+
+    
 
     const data = await employeeService.getEmployeeById(id);
 
@@ -32,7 +35,12 @@ const login = async (loginData) => {
     });
 
     if (!user) {
-
+      if(password !== cnfPass){
+        return{
+          success:false,
+          message:"Confirm pass and Password dont match"
+        }
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
       employee.password = hashedPassword;
       await employee.save();
