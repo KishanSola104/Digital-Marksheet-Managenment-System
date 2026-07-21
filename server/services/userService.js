@@ -18,6 +18,7 @@ const login = async (loginData) => {
 
     const employee = data.employee;
 
+    // Krunal worked Here Recently, You have to print employee role
 
     if (employee.role !== role) {
       return {
@@ -25,12 +26,11 @@ const login = async (loginData) => {
         message: "Please select your designated role",
       };
     }
-
-
+    
     let user = await User.findOne({
       employeeId: employee._id,
     });
-
+    
     if (!user) {
       if (password !== cnfPass) {
         return {
@@ -38,17 +38,16 @@ const login = async (loginData) => {
           message: "Confirm pass and Password dont match"
         }
       }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      employee.password = hashedPassword;
-      await employee.save();
-
+      
+      
       user = await User.create({
         userId: employee.employeeId,
         userName: employee.firstName,
+        password:password,
+        roleId:[],
         employeeId: employee._id,
         status: "Active",
       });
-      // console.log("Set Password");
     }
 
     else {

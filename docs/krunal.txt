@@ -1,0 +1,18 @@
+[
+    {
+        "roleId": 1,
+        "roleName": "SUPER_ADMIN"
+    },
+    {
+        "roleId": 2,
+        "roleName": "HEAD_MASTER"
+    },
+    {
+        "roleId": 3,
+        "roleName": "ASSIS_TEACHER"
+    },
+    {
+        "roleId": 4,
+        "roleName": "CLEARK"
+    }
+]

@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const app = express();
 const employeeRoute = require('./routes/employeeRoute');
 const userRoute = require('./routes/userRoute');
+const roleRoutes = require("./routes/roleRoute");
 const studentRoute = require('./routes/studentRoute');
 
 const corsOptions = {
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 app.use('/employees', employeeRoute);
 app.use('/login', userRoute)
 app.use('/students', studentRoute);
+app.use("/roles", roleRoutes);
 
 
 const PORT = process.env.PORT || 8080;

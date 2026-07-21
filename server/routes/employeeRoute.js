@@ -9,7 +9,7 @@ const authorize = require("../middlewares/authorize");
 router.post(
     "/",
     authenticate,
-    authorize("ADMIN"),
+    // authorize("SUPER_ADMIN"),
     employeeController.createEmployee
 );
 
