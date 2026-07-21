@@ -9,7 +9,7 @@ const authorize = require("../middlewares/authorize");
 router.post(
     "/",
     authenticate,
-    // authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.createEmployee
 );
 
@@ -17,7 +17,7 @@ router.post(
 router.get(
     "/",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.getEmployee
 );
 
@@ -25,7 +25,7 @@ router.get(
 router.get(
     "/get/:id",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.getEmployeeById
 );
 
@@ -33,7 +33,7 @@ router.get(
 router.get(
     "/getByName/:name",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.getEmployeeByName
 );
 
@@ -41,7 +41,7 @@ router.get(
 router.put(
     "/update/:id",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.updateEmployeeById
 );
 
@@ -49,7 +49,7 @@ router.put(
 router.delete(
     "/delete/:id",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.deleteById
 );
 
@@ -57,7 +57,7 @@ router.delete(
 router.patch(
     "/status/:id",
     authenticate,
-    authorize("SUPER_ADMIN"),
+    authorize(1),
     employeeController.statusChangeById
 );
 

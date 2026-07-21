@@ -6,9 +6,9 @@ const userSchema = new mongoose.Schema(
 
         userName : {type:String, require:true},
 
-        RoleId: {
+        roleIds: {
             type: [Number],
-            default: []
+            default:[]
         },
         
         employeeId: {type:mongoose.Schema.Types.ObjectId, ref: "Employee", required:true, unique:true},

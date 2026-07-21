@@ -1,7 +1,7 @@
-const authorize = (...roles) => {
+const authorize = (...allowedRoleIds) => {
     return (req, res, next) => {
         try {
-
+            
             if (!req.user) {
                 return res.status(401).json({
                     success: false,
@@ -9,8 +9,13 @@ const authorize = (...roles) => {
                 });
             }
 
-            // Check user's role instead of designation
-            if (!roles.includes(req.user.role)) {
+            const userRoles = req.user.roleIds || [];
+
+            const hasAccess = userRoles.some(roleId =>
+                allowedRoleIds.includes(roleId)
+            );
+
+            if (!hasAccess) {
                 return res.status(403).json({
                     success: false,
                     message: "Access Denied"

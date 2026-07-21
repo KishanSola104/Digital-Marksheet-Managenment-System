@@ -19,6 +19,25 @@ const addRole = async (req, res) => {
     }
 };
 
+
+const getRole = async (req,res) =>{
+    try {
+        
+        const result = await roleService.getRole(req.params.id);
+
+        if (!result.success) {
+            return res.status(400).json(result);
+        }
+
+        return res.status(201).json(result);
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
 module.exports = {
-    addRole
+    addRole,getRole
 };

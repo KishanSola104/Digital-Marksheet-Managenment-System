@@ -35,6 +35,30 @@ const addRole = async (roleData) => {
     }
 };
 
+const getRole = async(id)=>{
+    try {
+
+        const role = await Role.findOne({ roleId: id });
+
+        if (!role) {
+            return {
+                success: false,
+                message: "Role not found."
+            };
+        }
+
+        return {
+            success: true,
+            id:role.roleId,
+            message : role.roleName
+        };
+
+    } catch (error) {
+        throw error;
+    }
+    
+}
+
 module.exports = {
-    addRole
+    addRole,getRole
 };

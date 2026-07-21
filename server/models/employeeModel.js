@@ -63,14 +63,7 @@ const employeeSchema = new mongoose.Schema(
 
         // Used for Authentication & Authorization
         role: {
-            type: String,
-            enum: [
-                "ADMIN",
-                "HEAD_TEACHER",
-                "CLASS_TEACHER",
-                "SUBJECT_TEACHER",
-                "OFFICE_STAFF"
-            ],
+            type: [Number],
             required: true,
         },
 

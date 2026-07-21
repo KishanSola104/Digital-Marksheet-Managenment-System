@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const employeeService = require("./employeeService");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {getRole} = require("./roleService")
 
 const login = async (loginData) => {
   try {
@@ -15,17 +16,14 @@ const login = async (loginData) => {
         message: "Invalid Employee ID",
       };
     }
-
+    
     const employee = data.employee;
-
-    // Krunal worked Here Recently, You have to print employee role
-
-    if (employee.role !== role) {
+    if (!employee.role.includes(role)) {
       return {
-        success: false,
-        message: "Please select your designated role",
+          success: false,
+          message: "Please select Valid Role"
       };
-    }
+  }
     
     let user = await User.findOne({
       employeeId: employee._id,
@@ -38,48 +36,47 @@ const login = async (loginData) => {
           message: "Confirm pass and Password dont match"
         }
       }
-      
-      
+      const hashedPassword = await bcrypt.hash(password, 10);
       user = await User.create({
         userId: employee.employeeId,
         userName: employee.firstName,
-        password:password,
-        roleId:[],
+        password:hashedPassword,
+        roleIds:employee.role,
         employeeId: employee._id,
         status: "Active",
       });
+      // console.log(user);
     }
-
+    
     else {
-
+      
       const isMatch = await bcrypt.compare(
         password,
-        employee.password
+        user.password
       );
-
+      
       if (!isMatch) {
         return {
           success: false,
           message: "Invalid Password",
         };
       }
-
       user.status = "Active";
       await user.save();
     }
 
+    const roleName = await getRole(role);
     // Generate JWT
     const token = jwt.sign(
       {
-        employeeId: employee.employeeId,
-        id: employee._id,
-        role: employee.role,
+          employeeId: employee.employeeId,
+          id: employee._id,
+          roleIds: user.roleIds
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "8h",
-      }
-    );
+          expiresIn:"8h"
+      });
     // console.log("No Set Password");
     return {
       success: true,
@@ -91,7 +88,7 @@ const login = async (loginData) => {
         userName: user.userName,
 
         // Authentication
-        role: employee.role,
+        role: roleName.message,
 
         // Display Purpose
         designation: employee.designation,
