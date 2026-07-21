@@ -35,11 +35,6 @@ const employeeSchema = new mongoose.Schema(
             required: true,
         },
 
-        password: {
-            type: String,
-            required: true,
-        },
-
         mobileNumber: {
             type: String,
             unique: true,

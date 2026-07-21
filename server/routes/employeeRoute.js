@@ -17,7 +17,7 @@ router.post(
 router.get(
     "/",
     authenticate,
-    authorize("ADMIN", "HEAD_TEACHER"),
+    authorize("SUPER_ADMIN"),
     employeeController.getEmployee
 );
 
@@ -25,7 +25,7 @@ router.get(
 router.get(
     "/get/:id",
     authenticate,
-    authorize("ADMIN", "HEAD_TEACHER"),
+    authorize("SUPER_ADMIN"),
     employeeController.getEmployeeById
 );
 
@@ -33,7 +33,7 @@ router.get(
 router.get(
     "/getByName/:name",
     authenticate,
-    authorize("ADMIN", "HEAD_TEACHER"),
+    authorize("SUPER_ADMIN"),
     employeeController.getEmployeeByName
 );
 
@@ -41,7 +41,7 @@ router.get(
 router.put(
     "/update/:id",
     authenticate,
-    authorize("ADMIN"),
+    authorize("SUPER_ADMIN"),
     employeeController.updateEmployeeById
 );
 
@@ -49,7 +49,7 @@ router.put(
 router.delete(
     "/delete/:id",
     authenticate,
-    authorize("ADMIN"),
+    authorize("SUPER_ADMIN"),
     employeeController.deleteById
 );
 
@@ -57,7 +57,7 @@ router.delete(
 router.patch(
     "/status/:id",
     authenticate,
-    authorize("ADMIN"),
+    authorize("SUPER_ADMIN"),
     employeeController.statusChangeById
 );
 
