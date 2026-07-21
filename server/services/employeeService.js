@@ -140,9 +140,32 @@ const employeeService = {
         } catch (error) {
             throw new Error(`Error: ${error.message}`);
         }
+    },  
+
+    getEmployeesByRole : async (roleId) => {
+        try {
+            const employees = await employeeModel.find({
+                role: roleId
+            });
+            console.log(employees);
+            
+            if (employees.length === 0) {
+                return {
+                    success: false,
+                    message: "No employees found for this role."
+                };
+            }
+    
+            return {
+                success: true,
+                employees
+            };
+    
+        } catch (error) {
+            throw error;
+        }
     },
 
 };
-
 
 module.exports = employeeService;

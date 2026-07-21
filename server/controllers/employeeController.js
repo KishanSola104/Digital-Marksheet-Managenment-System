@@ -105,6 +105,27 @@ const statusChangeById = async (req,res) => {
     }
 };
 
+const getEmployeesByRole = async (req, res) => {
+    try {
+
+        const { roleId } = req.params;
+
+        const result = await employeeService.getEmployeesByRole(Number(roleId));
+
+        if (!result.success) {
+            return res.status(404).json(result);
+        }
+
+        return res.status(200).json(result);
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById, getEmployeeByName, updateEmployeeById, deleteById, statusChangeById
+    createEmployee, getEmployee, getEmployeeById,getEmployeesByRole, getEmployeeByName, updateEmployeeById, deleteById, statusChangeById
 };
