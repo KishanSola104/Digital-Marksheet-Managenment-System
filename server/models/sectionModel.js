@@ -9,8 +9,8 @@ const sectionSchema = new mongoose.Schema(
         section:{type:String, required:true},
         
         classTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
-        
-        sectionTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
+        // Not Needed
+        // sectionTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
         
         totalStudents:{type:Number, required:true},
         

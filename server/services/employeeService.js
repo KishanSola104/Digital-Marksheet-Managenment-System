@@ -6,6 +6,7 @@ const employeeService = {
 
     //Create Employee
     createEmployee: async (employeeData) => {
+        // mail functionality to be added
         try {
             const employee = new employeeModel(employeeData);
             await employee.save();

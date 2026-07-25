@@ -9,7 +9,7 @@ const classSubjectSchema = new mongoose.Schema(
         sectionId:{type:mongoose.Schema.Types.ObjectId, ref:"Section", required:true},
         
         subjectId:{type:mongoose.Schema.Types.ObjectId, ref:"Subject", required:true},
-        
+        // this is not required
         sectionTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
         
         subjectTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
