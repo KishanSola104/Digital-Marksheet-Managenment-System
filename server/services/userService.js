@@ -71,7 +71,7 @@ const login = async (loginData) => {
       {
           employeeId: employee.employeeId,
           id: employee._id,
-          roleIds: user.roleIds
+          roleIds: role
       },
       process.env.JWT_SECRET,
       {

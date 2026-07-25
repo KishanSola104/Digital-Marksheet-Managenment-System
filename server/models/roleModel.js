@@ -12,12 +12,6 @@ const roleSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            enum: [
-                "SUPER_ADMIN",
-                "HEAD_MASTER",
-                "ASSIS_TEACHER",
-                "CLEARK"
-            ],
         },
     },
     {

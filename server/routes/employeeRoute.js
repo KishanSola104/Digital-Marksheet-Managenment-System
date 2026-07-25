@@ -61,11 +61,5 @@ router.patch(
     employeeController.statusChangeById
 );
 
-router.get(
-    "/role/:roleId",
-    authenticate,
-    authorize(1),
-    employeeController.getEmployeesByRole
-);
 
 module.exports = router;
