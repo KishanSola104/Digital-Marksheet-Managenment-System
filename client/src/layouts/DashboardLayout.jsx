@@ -73,7 +73,7 @@ function DashboardLayout() {
 
         }
 
-    }, [user?.designation]);
+    }, [user?.role]);
 
     return (
         <DashboardShell

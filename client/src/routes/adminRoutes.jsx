@@ -1,3 +1,9 @@
+import DashboardLayout from "../layouts/DashboardLayout";
+
+import ProtectedRoute from "./ProtectedRoute";
+
+import { ROLES } from "../config/roles";
+
 import Dashboard from "../pages/admin/Dashboard";
 import Teachers from "../pages/admin/Teachers";
 import Students from "../pages/admin/Students";
@@ -13,80 +19,76 @@ import AuditLog from "../pages/admin/AuditLog";
 import Settings from "../pages/admin/Settings";
 import Profile from "../pages/common/Profile";
 
-const adminRoutes = [
-  {
-    index: true,
-    element: <Dashboard />,
-  },
-
-  {
-    path: "dashboard",
-    element: <Dashboard />,
-  },
-
-  {
-    path: "teachers",
-    element: <Teachers />,
-  },
-
-  {
-    path: "classes",
-    element: <Classes />,
-  },
-
-  {
-    path: "sections",
-    element: <Sections />,
-  },
-
-  {
-    path: "subjects",
-    element: <Subjects />,
-  },
-
-  {
-    path: "students",
-    element: <Students />,
-  },
-
-  {
-    path: "academic-year",
-    element: <AcademicYear />,
-  },
-
-  {
-    path: "exams",
-    element: <Exams />,
-  },
-
-  {
-    path: "office-staff",
-    element: <OfficeStaff />,
-  },
-
-  {
-    path: "school-information",
-    element: <SchoolInformation />,
-  },
-
-  {
-    path: "backup-restore",
-    element: <BackupRestore />,
-  },
-
-  {
-    path: "audit-log",
-    element: <AuditLog />,
-  },
-
-  {
-    path: "settings",
-    element: <Settings />,
-  },
-  {
-    path: "profile",
-    element: <Profile />,
-  },
-];
+const adminRoutes = {
+  element: <ProtectedRoute allowedRoles={[ROLES.ADMIN]} />,
+  children: [
+    {
+      path: "/admin",
+      element: <DashboardLayout />,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />,
+        },
+        {
+          path: "dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "teachers",
+          element: <Teachers />,
+        },
+        {
+          path: "classes",
+          element: <Classes />,
+        },
+        {
+          path: "sections",
+          element: <Sections />,
+        },
+        {
+          path: "subjects",
+          element: <Subjects />,
+        },
+        {
+          path: "students",
+          element: <Students />,
+        },
+        {
+          path: "academic-year",
+          element: <AcademicYear />,
+        },
+        {
+          path: "exams",
+          element: <Exams />,
+        },
+        {
+          path: "office-staff",
+          element: <OfficeStaff />,
+        },
+        {
+          path: "school-information",
+          element: <SchoolInformation />,
+        },
+        {
+          path: "backup-restore",
+          element: <BackupRestore />,
+        },
+        {
+          path: "audit-log",
+          element: <AuditLog />,
+        },
+        {
+          path: "settings",
+          element: <Settings />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+      ],
+    },
+  ],
+};
 
 export default adminRoutes;
