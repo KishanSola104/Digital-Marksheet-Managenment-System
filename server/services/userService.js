@@ -3,7 +3,7 @@ const employeeService = require("./employeeService");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {getRole} = require("./roleService")
-
+// pass using email
 const login = async (loginData) => {
   try {
     const { id, password, cnfPass, role } = loginData;
@@ -70,6 +70,7 @@ const login = async (loginData) => {
     const token = jwt.sign(
       {
           employeeId: employee.employeeId,
+          // this id is not really essential
           id: employee._id,
           roleIds: role
       },

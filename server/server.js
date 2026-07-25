@@ -7,7 +7,6 @@ const employeeRoute = require('./routes/employeeRoute');
 const userRoute = require('./routes/userRoute');
 const roleRoutes = require("./routes/roleRoute");
 const studentRoute = require('./routes/studentRoute');
-
 const corsOptions = {
     origin: ['http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],      
