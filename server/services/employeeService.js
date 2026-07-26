@@ -73,19 +73,18 @@ const employeeService = {
     //Update by Id
     updateEmployeeById: async (id, updateData) => {
         try {
-            const employee = await employeeModel.updateOne(
+            const employee = await employeeModel.findOneAndUpdate(
                 { employeeId: id },
-                { $set: updateData }
+                { $set: updateData },
+                {returnDocument:'after'}
             );
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
-
-            //const updatedEmployee = await employeeModel.findOne({employeeId:id});
             return {
                 success:true,
-                message: "Employee Updated Successfully"
-                //employee:updatedEmployee
+                message: "Employee Updated Successfully",
+                data:employee
             };
         } catch (error) {
             throw new Error(`Error While Updating Employee: ${error.message}`);
@@ -117,16 +116,16 @@ const employeeService = {
     //Status Change Active or Deactive
     statusChangeById: async (id, status) => {
         try {
-            const employee = await employeeModel.updateOne(
-                { employeeId: id },
-                { $set: { status: status } }
-            );
+            const employee = await employeeModel.findOne({ employeeId: id });
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
+            employee.status = employee.status === "Active"?"Inactive" : "Active";
+            await employee.save();
             return {
                 success:true,
-                message: "Employee Status Changed Successfully"
+                message: "Employee Status Changed Successfully",
+                data:employee
             };
         } catch (error) {
             throw new Error(`Error Changing Status: ${error.message}`);
@@ -134,9 +133,9 @@ const employeeService = {
     },
 
     // Get Employee By Email
-    getEmployeeByEmail: async (email) => {
+    getEmployeesByEmail: async (email) => {
         try {
-            const employee = await employeeModel.findOne({ email });
+            const employee = await employeeModel.findOne({email:email});
 
             if (!employee) {
                 throw new Error("Employee Not Found");
@@ -148,16 +147,15 @@ const employeeService = {
                 employee: employee
             };
         } catch (error) {
-            throw new Error(`Error: ${error.message}`);
+            throw new Error(`Error While Fetching Employee By Email: ${error.message}`);
         }
     },  
 
     //Get Employee By Role
     getEmployeesByRole : async (roleId) => {
         try {
-            const employees = await employeeModel.find({
-                roleId:new mongoose.Schema.Types.ObjectId(roleId)}).populate("roleId","roleName");
-            
+            const employees = await employeeModel.find({role:roleId});
+
             if (employees.length === 0) {
                 return {
                     success: false,

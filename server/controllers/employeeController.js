@@ -56,8 +56,8 @@ const getEmployeeByName = async (req,res) => {
 //Update By Id
 const updateEmployeeById = async (req,res) => {
     try{
-        const updateEmployee = await employeeService.updateEmployeeById(req.params.id,req.body);
-        res.status(201).json(updateEmployee);
+        const employee = await employeeService.updateEmployeeById(req.params.id,req.body);
+        res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
             success: false,
@@ -84,10 +84,7 @@ const deleteById = async (req, res) => {
 //Status Change Active or Deactive
 const statusChangeById = async (req,res) => { 
     try{
-        const employee = await employeeService.statusChangeById(
-            req.params.id,
-            req.body.status
-        );
+        const employee = await employeeService.statusChangeById(req.params.id);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
@@ -98,18 +95,21 @@ const statusChangeById = async (req,res) => {
 };
 
 //Get Employees By Email
-// const getEmployeesByEmail = async (req,res) => {
-//     try{
-//         const
-//     }
-// }
+const getEmployeesByEmail = async (req,res) => {
+    try{
+        const employee = await employeeService.getEmployeesByEmail(req.params.email);
+        res.status(200).json(employee);
+    }catch(error){
+        res.status(400).json({
+            success:false,
+            message:error.message
+        });
+    }
+};
 
 //Get Employees By Role
 const getEmployeesByRole = async (req, res) => {
     try {
-
-        //const { roleId } = req.params;
-
         const result = await employeeService.getEmployeesByRole(req.params.roleId);
 
         if (!result.success) {
@@ -127,5 +127,5 @@ const getEmployeesByRole = async (req, res) => {
 };
 
 module.exports = {
-    createEmployee, getEmployee, getEmployeeById,getEmployeesByRole, getEmployeeByName, updateEmployeeById, deleteById, statusChangeById
+    createEmployee, getEmployee, getEmployeeById,getEmployeesByRole, getEmployeeByName, updateEmployeeById, deleteById, statusChangeById,  getEmployeesByEmail, getEmployeesByRole
 };
