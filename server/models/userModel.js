@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema(
     {
         userId: {type:String, unique:true, required:true},
 
-        userName : {type:String, require:true},
+        userName : {type:String, required:true},
 
         roleIds: {
             type: [Number],

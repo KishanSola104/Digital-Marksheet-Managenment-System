@@ -6,81 +6,100 @@ const employeeSchema = new mongoose.Schema(
             type: String,
             unique: true,
             required: true,
+            trim: true,
+        },
+
+        // Reference to the School
+        schoolId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "School",
+            required: true,
         },
 
         firstName: {
             type: String,
             required: true,
+            trim: true,
         },
 
         lastName: {
             type: String,
             required: true,
+            trim: true,
         },
 
         gender: {
             type: String,
             enum: ["Male", "Female", "Other"],
-            required: true,
+            default: null,
         },
 
         dob: {
             type: Date,
-            required: true,
+            default: null,
         },
 
         email: {
             type: String,
             unique: true,
             required: true,
+            lowercase: true,
+            trim: true,
         },
 
         mobileNumber: {
             type: String,
             unique: true,
             required: true,
+            trim: true,
         },
 
         address: {
             type: String,
-            required: true,
+            default: null,
+            trim: true,
         },
 
         qualification: {
             type: String,
-            required: true,
+            default: null,
+            trim: true,
         },
 
         experience: {
             type: String,
-            required: true,
+            default: null,
+            trim: true,
         },
 
         joiningDate: {
             type: Date,
-            required: true,
+            default: null,
         },
 
         // Used for Authentication & Authorization
         role: {
             type: [Number],
             required: true,
+            default: [],
         },
 
-        // Used only for Display
+        // Used for Display
         designation: {
             type: String,
             required: true,
+            trim: true,
         },
 
         department: {
             type: String,
-            required: true,
+            default: null,
+            trim: true,
         },
 
         salary: {
             type: Number,
-            required: true,
+            default: null,
         },
 
         status: {
