@@ -122,3 +122,170 @@ response:
 
 -> get Role By id:  http://localhost:8000/roles/1  ->get  (1 is the roleId)
 
+
+
+
+// Kishan's API's 
+
+Authentication API Documentation
+
+Base URL
+
+http://localhost:8000/api/auth
+1. Register School
+URL
+POST /register-school
+Purpose
+
+Registers a new school along with the School Admin, User Account, and sends login credentials via email.
+
+Request Body
+{
+    "schoolName": "Knowledge Bright Public School",
+    "email": "school@gmail.com",
+    "phone": "9876543210",
+    "address": "Vadodara, Gujarat",
+    "establishedYear": 2020,
+    "website": "https://kbps.com",
+
+    "firstName": "Kishan",
+    "lastName": "Solanki",
+    "gender": "Male",
+    "dateOfBirth": "2005-05-20",
+    "mobileNumber": "9876543210",
+    "alternateMobileNumber": "9876543211",
+    "employeeEmail": "admin@gmail.com"
+}
+Success Response
+{
+    "success": true,
+    "message": "School registered successfully."
+}
+2. School Login
+URL
+POST /school-login
+Purpose
+
+Authenticates the school and returns a JWT token.
+
+Request Body
+{
+    "schoolId": "KBPSVLG005",
+    "password": "SchoolPassword"
+}
+Success Response
+{
+    "success": true,
+    "message": "School login successful.",
+    "token": "JWT_TOKEN",
+    "school": {
+        "id": "...",
+        "schoolId": "KBPSVLG005",
+        "schoolName": "Knowledge Bright Public School",
+        "email": "school@gmail.com",
+        "phone": "9876543210",
+        "status": "Active"
+    }
+}
+3. Verify School
+URL
+GET /verify-school
+Purpose
+
+Verifies the logged-in school using the JWT token.
+
+Authorization
+Bearer <School JWT Token>
+Success Response
+{
+    "success": true,
+    "message": "School verified successfully.",
+    "school": {
+        "id": "...",
+        "schoolId": "KBPSVLG005",
+        "schoolName": "Knowledge Bright Public School",
+        "email": "school@gmail.com",
+        "phone": "9876543210",
+        "status": "Active"
+    }
+}
+4. Employee Login
+URL
+POST /employee-login
+Purpose
+
+Authenticates Admin, Head Teacher, Class Teacher, Subject Teacher, and Clerk.
+
+Request Body
+{
+    "userId": "KBPSKSOYX005",
+    "password": "Password"
+}
+Success Response
+{
+    "success": true,
+    "message": "Login successful.",
+    "token": "JWT_TOKEN",
+    "user": {
+        "userId": "KBPSKSOYX005",
+        "userName": "Kishan Solanki",
+        "roleIds": [1],
+        "status": "Active"
+    },
+    "employee": {
+        "employeeId": "KBPSKSOYX005",
+        "designation": "Admin",
+        "department": "Administration"
+    }
+}
+5. Forgot Password
+URL
+POST /forgot-password
+Purpose
+
+Generates a temporary password and sends it to the employee's registered email.
+
+Request Body
+{
+    "userId": "KBPSKSOYX005"
+}
+Success Response
+{
+    "success": true,
+    "message": "A temporary password has been sent to your registered email."
+}
+6. Change Password
+URL
+POST /change-password
+Purpose
+
+Allows a logged-in employee to change their password.
+
+Authorization
+Bearer <Employee JWT Token>
+Request Body
+{
+    "currentPassword": "OldPassword",
+    "newPassword": "NewPassword123"
+}
+Success Response
+{
+    "success": true,
+    "message": "Password changed successfully."
+}
+7. Logout
+URL
+POST /logout
+Purpose
+
+Logs out the current user. Since JWT authentication is stateless, the frontend should remove the stored token and user information after receiving this response.
+
+Authorization
+Bearer <JWT Token>
+Request Body
+{}
+Success Response
+{
+    "success": true,
+    "message": "Logged out successfully."
+}

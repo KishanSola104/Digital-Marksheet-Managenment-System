@@ -34,13 +34,13 @@ app.get('/', (req, res) => {
 
 
 //Routes
-app.use('/employees', employeeRoute);
-app.use('/login', userRoute)
-app.use('/students', studentRoute);
-app.use("/roles", roleRoutes);
-app.use('/classes', classRoute);
-app.use('/academicYear',academicYearRoute);
-app.use('/subjects', subjectRoute);
+app.use("/api/employees", employeeRoute);
+app.use("/api/login", userRoute);
+app.use("/api/students", studentRoute);
+app.use("/api/roles", roleRoutes);
+app.use("/api/classes", classRoute);
+app.use("/api/academic-years", academicYearRoute);
+app.use("/api/subjects", subjectRoute);
 
 /* Added By Kishan */
 app.use("/api/auth", authRoutes);
