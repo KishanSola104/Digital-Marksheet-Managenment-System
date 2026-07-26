@@ -1,5 +1,5 @@
-const { statusChangeById } = require('../controllers/employeeController');
 const employeeModel = require('../models/employeeModel');
+const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 
 const employeeService = {
@@ -11,6 +11,7 @@ const employeeService = {
             const employee = new employeeModel(employeeData);
             await employee.save();
             return {
+                success:true,
                 message: 'Employee created successfully',
                 employee: employee
             }
@@ -25,6 +26,7 @@ const employeeService = {
 
             const employees = await employeeModel.find();
             return {
+                success:true,
                 message: "Employees Fetched",
                 employees: employees
             };
@@ -41,6 +43,7 @@ const employeeService = {
                 throw new Error("Employee Not Found");
             }
             return {
+                success:true,
                 message: "Employee Fetched",
                 employee: employee
             };
@@ -58,6 +61,7 @@ const employeeService = {
                 throw new Error("Employee Not Found");
             }
             return {
+                success:true,
                 message: "Employee Fetched",
                 employee: employee
             };
@@ -79,6 +83,7 @@ const employeeService = {
 
             //const updatedEmployee = await employeeModel.findOne({employeeId:id});
             return {
+                success:true,
                 message: "Employee Updated Successfully"
                 //employee:updatedEmployee
             };
@@ -100,6 +105,7 @@ const employeeService = {
             }
     
             return {
+                success:true,
                 message: "Employee Deleted Successfully"
             };
     
@@ -119,12 +125,14 @@ const employeeService = {
                 throw new Error("Employee Not Found");
             }
             return {
+                success:true,
                 message: "Employee Status Changed Successfully"
             };
         } catch (error) {
             throw new Error(`Error Changing Status: ${error.message}`);
         }
     },
+
     // Get Employee By Email
     getEmployeeByEmail: async (email) => {
         try {
@@ -135,6 +143,7 @@ const employeeService = {
             }
 
             return {
+                success:true,
                 message: "Employee Fetched",
                 employee: employee
             };
@@ -143,12 +152,11 @@ const employeeService = {
         }
     },  
 
+    //Get Employee By Role
     getEmployeesByRole : async (roleId) => {
         try {
             const employees = await employeeModel.find({
-                role: roleId
-            });
-            console.log(employees);
+                roleId:new mongoose.Schema.Types.ObjectId(roleId)}).populate("roleId","roleName");
             
             if (employees.length === 0) {
                 return {
@@ -163,10 +171,9 @@ const employeeService = {
             };
     
         } catch (error) {
-            throw error;
+            throw new Error(`Error While Fetching By Role: ${error.message}`);
         }
-    },
-
+    }
 };
 
 module.exports = employeeService;

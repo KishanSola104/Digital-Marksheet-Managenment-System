@@ -4,13 +4,11 @@ const sectionSchema = new mongoose.Schema(
     {
         sectionId:{type:String, unique:true, required:true},
         
-        classId:{type:mongoose.Schema.Types.ObjectId, ref:"Class", required:true},
+        classId:{type:String, required:true},
         
         section:{type:String, required:true},
         
-        classTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
-        // Not Needed
-        // sectionTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true},
+        classTeacherId:{type:String, required:true},
         
         totalStudents:{type:Number, required:true},
         

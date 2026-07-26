@@ -14,7 +14,6 @@ const markSchema = new mongoose.Schema(
         
         subjects:[
             {
-            
                 subjectId:{type:mongoose.Schema.Types.ObjectId, ref:"Subject", required:true},
             
                 marks:{type:Number, required:true, min:0},
