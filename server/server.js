@@ -10,6 +10,7 @@ const studentRoute = require('./routes/studentRoute');
 const classRoute = require('./routes/classRoute');
 const academicYearRoute = require('./routes/academicYearRoute');
 const subjectRoute = require('./routes/subjectRoute');
+const classSubjectRoute = require('./routes/classSubjectRoute');
 const corsOptions = {
     origin: ['http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],      
@@ -37,6 +38,7 @@ app.use("/roles", roleRoutes);
 app.use('/classes', classRoute);
 app.use('/academicYear',academicYearRoute);
 app.use('/subjects', subjectRoute);
+app.use('/classSubjects', classSubjectRoute);
 
 /* Added By Kishan */
 app.use("/api/auth", authRoutes);

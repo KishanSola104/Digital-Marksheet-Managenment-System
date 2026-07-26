@@ -4,11 +4,11 @@ const classSubjectSchema = new mongoose.Schema(
     {
         classSubjectId:{type:String, unique:true, required:true},
         
-        classId:{type:String, ref:"Class", required:true},
+        classId:{type:String, required:true},
         
-        sectionId:{type:String, ref:"Section", required:true},
+        sectionId:{type:String, required:true},
         
-        subjectId:{type:String, ref:"Subject", required:true},
+        subjectId:{type:String, required:true},
         
         subjectTeacherId:{type:String, required:true},
         
