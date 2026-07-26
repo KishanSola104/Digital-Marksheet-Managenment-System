@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import useSchool from "../hooks/useSchool";
+import useSchoolAuth from "../hooks/useSchoolAuth";
 
 import {
   GraduationCap,
@@ -16,7 +16,8 @@ import HeroImage from "../assets/images/Image.png";
 function HomePage() {
   const navigate = useNavigate();
 
-  const { isSchoolAuthenticated } = useSchool();
+ 
+  const { isSchoolAuthenticated } = useSchoolAuth();
 
   const handleLogin = () => {
     if (isSchoolAuthenticated) {

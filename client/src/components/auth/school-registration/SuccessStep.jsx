@@ -1,11 +1,7 @@
-import { CheckCircle2, Mail, Building2, User } from "lucide-react";
+import { CheckCircle2, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-function SuccessStep({
-  schoolCode,
-  adminEmployeeId,
-  email,
-}) {
+function SuccessStep({ email }) {
   return (
     <div className="py-6">
 
@@ -30,54 +26,10 @@ function SuccessStep({
 
         <p className="mt-3 text-slate-600">
           Your school has been successfully registered on the
-          <span className="font-semibold"> Digital Marksheet Management System (DMMS)</span>.
+          <span className="font-semibold">
+            {" "}Digital Marksheet Management System (DMMS)
+          </span>.
         </p>
-
-        {/* Generated Information */}
-
-        <div className="mt-8 rounded-lg border border-slate-200 bg-slate-50">
-
-          <div className="grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
-
-            <div className="p-6">
-
-              <div className="flex items-center justify-center gap-2 text-blue-600">
-
-                <Building2 size={20} />
-
-                <span className="font-semibold">
-                  School Code
-                </span>
-
-              </div>
-
-              <p className="mt-3 text-2xl font-bold tracking-wide text-slate-900">
-                {schoolCode}
-              </p>
-
-            </div>
-
-            <div className="p-6">
-
-              <div className="flex items-center justify-center gap-2 text-blue-600">
-
-                <User size={20} />
-
-                <span className="font-semibold">
-                  Administrator ID
-                </span>
-
-              </div>
-
-              <p className="mt-3 text-2xl font-bold tracking-wide text-slate-900">
-                {adminEmployeeId}
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
 
         {/* Email Information */}
 
@@ -97,12 +49,18 @@ function SuccessStep({
               </h3>
 
               <p className="mt-1 text-sm leading-6 text-blue-800">
-                Your School Login credentials and Administrator Login credentials
-                have been sent to:
+                Your School ID, Administrator User ID, and their temporary
+                passwords have been securely sent to the registered email
+                address below.
               </p>
 
-              <p className="mt-2 font-semibold text-blue-900">
+              <p className="mt-3 font-semibold text-blue-900">
                 {email}
+              </p>
+
+              <p className="mt-3 text-sm text-blue-700">
+                Please check your Inbox. If you don't find the email, kindly
+                check your Spam or Junk folder as well.
               </p>
 
             </div>
@@ -121,13 +79,15 @@ function SuccessStep({
 
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-emerald-800">
 
-            <li>Check your email for your login credentials.</li>
+            <li>Open the email containing your login credentials.</li>
 
-            <li>Log in using your School Code and password.</li>
+            <li>Use the provided School ID and password to log in.</li>
 
-            <li>Complete your school profile.</li>
+            <li>Use the Administrator User ID and password to access the ERP.</li>
 
-            <li>Add classes, teachers, students, and subjects.</li>
+            <li>Change the temporary passwords after your first login.</li>
+
+            <li>Complete your school profile and begin adding classes, teachers, students, and subjects.</li>
 
           </ul>
 

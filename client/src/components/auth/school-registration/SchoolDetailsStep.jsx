@@ -43,16 +43,16 @@ function SchoolDetailsStep({
       validationErrors.schoolName = "School name is required.";
     }
 
-    if (!data.officialEmail?.trim()) {
-      validationErrors.officialEmail = "Official email is required.";
+    if (!data.email?.trim()) {
+      validationErrors.email = "Official email is required.";
     }
 
-    if (!data.contactNumber?.trim()) {
-      validationErrors.contactNumber = "Contact number is required.";
+    if (!data.phone?.trim()) {
+      validationErrors.phone = "Contact number is required.";
     }
 
-    if (!data.establishmentYear?.trim()) {
-      validationErrors.establishmentYear =
+    if (!data.establishedYear?.toString().trim()) {
+      validationErrors.establishedYear =
         "Established year is required.";
     }
 
@@ -114,33 +114,33 @@ function SchoolDetailsStep({
 
         <FormInput
           label="Official Email"
-          name="officialEmail"
+          name="email"
           type="email"
-          value={data.officialEmail}
+          value={data.email}
           onChange={handleChange}
-          error={errors.officialEmail}
+          error={errors.email}
           placeholder="school@example.com"
           required
         />
 
         <FormInput
           label="Contact Number"
-          name="contactNumber"
+          name="phone"
           type="tel"
-          value={data.contactNumber}
+          value={data.phone}
           onChange={handleChange}
-          error={errors.contactNumber}
+          error={errors.phone}
           placeholder="+91 9876543210"
           required
         />
 
         <FormInput
           label="Established Year"
-          name="establishmentYear"
-          type="text"
-          value={data.establishmentYear}
+          name="establishedYear"
+          type="number"
+          value={data.establishedYear}
           onChange={handleChange}
-          error={errors.establishmentYear}
+          error={errors.establishedYear}
           placeholder="2005"
           required
         />

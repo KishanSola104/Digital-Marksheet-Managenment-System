@@ -7,17 +7,36 @@ export function SchoolProvider({ children }) {
   const [schoolToken, setSchoolToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /*
+  ---------------------------------------------------
+  Restore School Session
+  ---------------------------------------------------
+  */
+
   useEffect(() => {
-    const storedSchool = localStorage.getItem("school");
-    const storedToken = localStorage.getItem("schoolToken");
+    try {
+      const storedSchool = localStorage.getItem("school");
+      const storedToken = localStorage.getItem("schoolToken");
 
-    if (storedSchool && storedToken) {
-      setSchool(JSON.parse(storedSchool));
-      setSchoolToken(storedToken);
+      if (storedSchool && storedToken) {
+        setSchool(JSON.parse(storedSchool));
+        setSchoolToken(storedToken);
+      }
+    } catch (error) {
+      console.error("Failed to restore school session:", error);
+
+      localStorage.removeItem("school");
+      localStorage.removeItem("schoolToken");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, []);
+
+  /*
+  ---------------------------------------------------
+  Login School
+  ---------------------------------------------------
+  */
 
   const loginSchool = (schoolData, token) => {
     localStorage.setItem("school", JSON.stringify(schoolData));
@@ -26,6 +45,12 @@ export function SchoolProvider({ children }) {
     setSchool(schoolData);
     setSchoolToken(token);
   };
+
+  /*
+  ---------------------------------------------------
+  Logout School
+  ---------------------------------------------------
+  */
 
   const logoutSchool = () => {
     localStorage.removeItem("school");
@@ -41,12 +66,16 @@ export function SchoolProvider({ children }) {
         school,
         schoolToken,
         loading,
+
         loginSchool,
         logoutSchool,
-        isSchoolAuthenticated: !!schoolToken,
+
+        isSchoolAuthenticated: !!school && !!schoolToken,
       }}
     >
       {children}
     </SchoolContext.Provider>
   );
 }
+
+export default SchoolContext;

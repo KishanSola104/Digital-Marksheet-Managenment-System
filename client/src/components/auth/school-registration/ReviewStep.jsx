@@ -29,12 +29,12 @@ function ReviewStep({
         </h2>
 
         <p className="mt-1 text-sm text-slate-500">
-          Please review your information before creating your school account.
+          Please review your information before creating your school's ERP account.
         </p>
 
       </div>
 
-      {/* School */}
+      {/* School Information */}
 
       <div className="rounded-lg border border-slate-200 bg-white">
 
@@ -55,17 +55,17 @@ function ReviewStep({
 
           <Row
             label="Official Email"
-            value={school.officialEmail}
+            value={school.email}
           />
 
           <Row
             label="Contact Number"
-            value={school.contactNumber}
+            value={school.phone}
           />
 
           <Row
             label="Established Year"
-            value={school.establishmentYear}
+            value={school.establishedYear}
           />
 
           <Row
@@ -82,7 +82,7 @@ function ReviewStep({
 
       </div>
 
-      {/* Administrator */}
+      {/* Administrator Information */}
 
       <div className="rounded-lg border border-slate-200 bg-white">
 
@@ -102,13 +102,28 @@ function ReviewStep({
           />
 
           <Row
-            label="Email"
-            value={admin.email}
+            label="Gender"
+            value={admin.gender}
           />
 
           <Row
-            label="Phone Number"
-            value={admin.phone}
+            label="Date of Birth"
+            value={admin.dateOfBirth}
+          />
+
+          <Row
+            label="Mobile Number"
+            value={admin.mobileNumber}
+          />
+
+          <Row
+            label="Alternate Mobile Number"
+            value={admin.alternateMobileNumber}
+          />
+
+          <Row
+            label="Employee Email"
+            value={admin.employeeEmail}
           />
 
         </div>
@@ -125,14 +140,14 @@ function ReviewStep({
 
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-green-700">
 
-          <li>School Code will be generated automatically.</li>
+          <li>School ID will be generated automatically.</li>
 
           <li>Administrator Employee ID will be generated.</li>
 
           <li>Secure login credentials will be created.</li>
 
           <li>
-            Credentials will be sent to the registered email address.
+            Login credentials will be sent to both the School Email and Employee Email.
           </li>
 
         </ul>
@@ -152,6 +167,7 @@ function ReviewStep({
         </button>
 
         <button
+          type="button"
           onClick={submit}
           disabled={loading}
           className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"

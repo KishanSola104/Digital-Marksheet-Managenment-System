@@ -3,20 +3,33 @@ import { useState } from "react";
 import Button from "../ui/Button";
 import { Input, FormField } from "../ui/SearchInput";
 
+import { forgotPassword } from "../../services/authService";
+
 function ForgotPasswordForm({
+  title = "Forgot Password?",
+  description = "Enter your Employee ID. A new temporary password will be sent to your registered email address.",
   onBack,
   onSubmit,
 }) {
-  const [email, setEmail] = useState("");
+  const [userId, setEmployeeId] = useState("");
+
   const [loading, setLoading] = useState(false);
+
   const [success, setSuccess] = useState(false);
+
   const [error, setError] = useState("");
+
+  /*
+  ---------------------------------------------------
+  Forgot Password
+  ---------------------------------------------------
+  */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email.trim()) {
-      setError("Please enter your email address.");
+    if (!userId.trim()) {
+      setError("Please enter your Employee ID.");
       return;
     }
 
@@ -24,30 +37,46 @@ function ForgotPasswordForm({
     setLoading(true);
 
     try {
-      // Later replace this with your backend API
-      // await onSubmit(email);
+      const response = await forgotPassword({
+        userId: userId.trim().toUpperCase(),
+      });
 
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      if (!response.success) {
+        throw new Error(
+          response.message ||
+            "Unable to process your request."
+        );
+      }
 
       setSuccess(true);
 
       if (onSubmit) {
-        onSubmit(email);
+        onSubmit(userId.trim().toUpperCase());
       }
 
     } catch (err) {
-      setError("Unable to send reset link.");
+      console.error(err);
+
+      setError(
+        err.message ||
+          "Unable to send a temporary password."
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  /*
+  ---------------------------------------------------
+  Success Screen
+  ---------------------------------------------------
+  */
 
   if (success) {
     return (
       <div className="text-center">
 
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-
           <svg
             className="h-8 w-8 text-blue-700"
             fill="none"
@@ -57,19 +86,19 @@ function ForgotPasswordForm({
           >
             <path d="M5 13l4 4L19 7" />
           </svg>
-
         </div>
 
         <h2 className="mt-6 text-2xl font-bold text-slate-900">
-          Check Your Email
+          Temporary Password Sent
         </h2>
 
         <p className="mt-3 text-sm leading-6 text-slate-500">
-          We've sent a password reset link to
+          A new temporary password has been sent to the registered email address
+          associated with Employee ID
         </p>
 
-        <p className="mt-1 font-medium text-blue-700">
-          {email}
+        <p className="mt-2 font-semibold text-blue-700">
+          {userId}
         </p>
 
         <Button
@@ -84,10 +113,17 @@ function ForgotPasswordForm({
     );
   }
 
+  /*
+  ---------------------------------------------------
+  Form
+  ---------------------------------------------------
+  */
+
   return (
     <div>
 
       <button
+        type="button"
         onClick={onBack}
         className="mb-6 flex items-center gap-2 text-sm font-medium text-blue-700 hover:text-blue-800"
       >
@@ -95,12 +131,11 @@ function ForgotPasswordForm({
       </button>
 
       <h2 className="text-3xl font-bold text-slate-900">
-        Forgot Password?
+        {title}
       </h2>
 
       <p className="mt-2 text-sm leading-6 text-slate-500">
-        Enter your registered email address and we'll send
-        you a password reset link.
+        {description}
       </p>
 
       {error && (
@@ -115,14 +150,17 @@ function ForgotPasswordForm({
       >
 
         <FormField
-          label="Email Address"
+          label="Employee ID"
           required
         >
           <Input
-            type="email"
-            placeholder="Enter your registered email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Enter your Employee ID"
+            value={userId}
+            onChange={(e) =>
+              setEmployeeId(e.target.value.toUpperCase())
+            }
+            autoComplete="username"
           />
         </FormField>
 
@@ -130,8 +168,11 @@ function ForgotPasswordForm({
           type="submit"
           className="w-full"
           loading={loading}
+          disabled={loading}
         >
-          Send Reset Link
+          {loading
+            ? "Sending..."
+            : "Send Temporary Password"}
         </Button>
 
       </form>

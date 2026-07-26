@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 import { Input, FormField } from "../ui/SearchInput";
@@ -7,17 +8,24 @@ import { Input, FormField } from "../ui/SearchInput";
 import RoleSelect from "./RoleSelect";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 
-import { useNavigate } from "react-router-dom";
+import { employeeLogin } from "../../services/authService";
 
-import { loginUser } from "../../services/authService";
 import useAuth from "../../hooks/useAuth";
+import useSchoolAuth from "../../hooks/useSchoolAuth";
 
 import { ROLE_BASE_PATHS } from "../../config/paths";
 
 function LoginForm() {
-  const [role, setRole] = useState("");
   const navigate = useNavigate();
+
   const { login } = useAuth();
+
+  const {
+    school,
+    isSchoolAuthenticated,
+  } = useSchoolAuth();
+
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,84 +37,127 @@ function LoginForm() {
 
   const [forgotPassword, setForgotPassword] = useState(false);
 
- 
+  /*
+  ---------------------------------------------------
+  Employee Login
+  ---------------------------------------------------
+  */
 
- const handleLogin = async (e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  if (!role) {
-    setError("Please select your role.");
-    return;
-  }
+    /*
+    -----------------------------------------
+    Verify School Session
+    -----------------------------------------
+    */
 
-  if (!email.trim()) {
-    setError("Please enter your email.");
-    return;
-  }
+    if (!isSchoolAuthenticated || !school) {
+      navigate("/school/login", { replace: true });
+      return;
+    }
 
-  if (!password.trim()) {
-    setError("Please enter your password.");
-    return;
-  }
+    /*
+    -----------------------------------------
+    Validation
+    -----------------------------------------
+    */
 
-  setError("");
-  setLoading(true);
+    if (!role) {
+      setError("Please select your role.");
+      return;
+    }
 
-  try {
-    const response = await loginUser({
-      email,
-      password,
-    });
+    if (!email.trim()) {
+      setError("Please enter your email.");
+      return;
+    }
 
-    console.log("Full Response:", response);
-    console.log("User:", response.user);
-    console.log("Role:", response.user.role);
-    console.log("Dashboard Path:", ROLE_BASE_PATHS[response.user.role]);
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      return;
+    }
 
-    if (response.token && response.user) {
+    setError("");
+    setLoading(true);
 
-      if (response.user.role !== role) {
-        throw new Error("Selected role does not match your account.");
+    try {
+      const response = await employeeLogin({
+        email: email.trim(),
+        password,
+      });
+
+      if (!response.success) {
+        throw new Error(
+          response.message || "Login failed."
+        );
       }
 
+      /*
+      -----------------------------------------
+      Verify Selected Role
+      -----------------------------------------
+      */
+
+      if (response.user.role !== role) {
+        throw new Error(
+          "Selected role does not match your account."
+        );
+      }
+
+      /*
+      -----------------------------------------
+      Save Employee Session
+      -----------------------------------------
+      */
+
       login(response.user, response.token);
+
+      /*
+      -----------------------------------------
+      Redirect
+      -----------------------------------------
+      */
 
       const dashboardPath =
         ROLE_BASE_PATHS[response.user.role] || "/";
 
-      navigate(dashboardPath, { replace: true });
+      navigate(dashboardPath, {
+        replace: true,
+      });
 
-    } else if (response.data?.token && response.data?.user) {
+    } catch (err) {
+      console.error(err);
 
-      if (response.data.user.role !== role) {
-        throw new Error("Selected role does not match your account.");
-      }
-
-      login(response.data.user, response.data.token);
-
-      const dashboardPath =
-        ROLE_BASE_PATHS[response.data.user.role] || "/";
-
-      navigate(dashboardPath, { replace: true });
-
-    } else {
-      throw new Error("Invalid login response received from server.");
+      setError(
+        err.message ||
+          "Unable to login."
+      );
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    setError(err.message || "Unable to login.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
+  /*
+  ---------------------------------------------------
+  Forgot Password
+  ---------------------------------------------------
+  */
 
   if (forgotPassword) {
-    return <ForgotPasswordForm onBack={() => setForgotPassword(false)} />;
+    return (
+      <ForgotPasswordForm
+        onBack={() => setForgotPassword(false)}
+      />
+    );
   }
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
+
+      <h1 className="text-3xl font-bold text-slate-900">
+        Welcome Back
+      </h1>
 
       <p className="mt-2 text-sm text-slate-500">
         Sign in to access your dashboard.
@@ -118,17 +169,33 @@ function LoginForm() {
         </div>
       )}
 
-      <form onSubmit={handleLogin} className="mt-8 space-y-5">
-        {/* ROLE */}
+      <form
+        onSubmit={handleLogin}
+        className="mt-8 space-y-5"
+      >
 
-        <FormField label="Role" required>
-          <RoleSelect value={role} onChange={(e) => setRole(e.target.value)} />
+        {/* Role */}
+
+        <FormField
+          label="Role"
+          required
+        >
+          <RoleSelect
+            value={role}
+            onChange={(e) =>
+              setRole(e.target.value)
+            }
+          />
         </FormField>
 
-        {/* EMAIL */}
+        {/* Email */}
 
-        <FormField label="Email Address" required>
+        <FormField
+          label="Email Address"
+          required
+        >
           <div className="relative">
+
             <Mail
               size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -138,54 +205,90 @@ function LoginForm() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               className="pl-10"
+              autoComplete="email"
             />
+
           </div>
         </FormField>
 
-        {/* PASSWORD */}
+        {/* Password */}
 
-        <FormField label="Password" required>
+        <FormField
+          label="Password"
+          required
+        >
           <div className="relative">
+
             <Lock
               size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
             />
 
             <Input
-              type={showPassword ? "text" : "password"}
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               className="pl-10 pr-10"
+              autoComplete="current-password"
             />
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              onClick={() =>
+                setShowPassword(
+                  (prev) => !prev
+                )
+              }
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? (
+                <EyeOff size={18} />
+              ) : (
+                <Eye size={18} />
+              )}
             </button>
+
           </div>
         </FormField>
 
-        {/* Forgot password */}
+        {/* Forgot Password */}
 
         <div className="text-right">
           <button
             type="button"
-            onClick={() => setForgotPassword(true)}
+            onClick={() =>
+              setForgotPassword(true)
+            }
             className="text-sm font-medium text-blue-600 hover:underline"
           >
             Forgot Password?
           </button>
         </div>
 
-        <Button type="submit" className="w-full" loading={loading}>
-          {loading ? "Signing In..." : "Sign In"}
+        {/* Submit */}
+
+        <Button
+          type="submit"
+          className="w-full"
+          loading={loading}
+          disabled={loading}
+        >
+          {loading
+            ? "Signing In..."
+            : "Sign In"}
         </Button>
+
       </form>
     </div>
   );

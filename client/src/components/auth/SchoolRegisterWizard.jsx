@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { registerSchool } from "../../services/authService";
+
 import Stepper from "./school-registration/Stepper";
 import SchoolDetailsStep from "./school-registration/SchoolDetailsStep";
 import AdminDetailsStep from "./school-registration/AdminDetailsStep";
@@ -25,6 +27,16 @@ function SchoolRegisterWizard() {
 
   /*
   ---------------------------------------------------
+  Registration Success Information
+  ---------------------------------------------------
+  */
+
+  const [schoolInfo, setSchoolInfo] = useState({
+    email: "",
+  });
+
+  /*
+  ---------------------------------------------------
   Registration Form Data
   ---------------------------------------------------
   */
@@ -32,18 +44,22 @@ function SchoolRegisterWizard() {
   const [formData, setFormData] = useState({
     school: {
       schoolName: "",
-      officialEmail: "",
-      contactNumber: "",
+      email: "",
+      phone: "",
       address: "",
       website: "",
-      establishmentYear: "",
+      establishedYear: "",
     },
 
     admin: {
       firstName: "",
       lastName: "",
-      email: "",
-      phone: "",
+      gender: "",
+      dateOfBirth: "",
+      mobileNumber: "",
+      alternateMobileNumber: "",
+      employeeEmail: "",
+      designation: "ADMIN",
     },
   });
 
@@ -103,37 +119,32 @@ function SchoolRegisterWizard() {
     try {
       setLoading(true);
 
-      console.log(formData);
+      const payload = {
+        ...formData.school,
+        ...formData.admin,
+      };
 
-      /*
-      Later
-
-      const response = await registerSchool(formData);
+      const response = await registerSchool(payload);
 
       if (response.success) {
-
         setSchoolInfo({
-          schoolCode: response.school.schoolCode,
-          adminEmployeeId: response.admin.employeeId,
-          email: response.email,
+          email: formData.school.email,
         });
 
         setCurrentStep(4);
       }
-
-      */
-
-      setTimeout(() => {
-        setLoading(false);
-        setCurrentStep(4);
-      }, 1200);
     } catch (error) {
       console.error(error);
+
+      alert(
+        error.message ||
+        "Something went wrong while registering the school."
+      );
+    } finally {
       setLoading(false);
     }
   };
-
-  /*
+    /*
   ---------------------------------------------------
   Render Current Step
   ---------------------------------------------------
@@ -174,9 +185,7 @@ function SchoolRegisterWizard() {
       case 4:
         return (
           <SuccessStep
-            schoolCode="SCH-000001"
-            adminEmployeeId="EMP-000001"
-            email={formData.admin.email}
+            email={schoolInfo.email}
           />
         );
 

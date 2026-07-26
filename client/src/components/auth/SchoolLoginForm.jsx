@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Eye, EyeOff, Lock, School } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 import { Input, FormField } from "../ui/SearchInput";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 
+import { schoolLogin } from "../../services/authService";
+import useSchoolAuth from "../../hooks/useSchoolAuth";
+
 function SchoolLoginForm() {
-  const [schoolCode, setSchoolCode] = useState("");
+  const navigate = useNavigate();
+
+  const { loginSchool } = useSchoolAuth();
+
+  const [schoolId, setSchoolId] = useState("");
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
@@ -18,11 +25,17 @@ function SchoolLoginForm() {
 
   const [forgotPassword, setForgotPassword] = useState(false);
 
+  /*
+  ---------------------------------------------------
+  School Login
+  ---------------------------------------------------
+  */
+
   const handleSchoolLogin = async (e) => {
     e.preventDefault();
 
-    if (!schoolCode.trim()) {
-      setError("Please enter your School Code.");
+    if (!schoolId.trim()) {
+      setError("Please enter your School ID.");
       return;
     }
 
@@ -35,36 +48,45 @@ function SchoolLoginForm() {
     setLoading(true);
 
     try {
-      /*
-        TODO:
-        Call School Login API
-
-        Example:
-
-        const response = await schoolLogin({
-            schoolCode,
-            password,
-        });
-
-        Store:
-        schoolToken
-        school
-
-        Navigate("/login");
-      */
-
-      console.log({
-        schoolCode,
+      const response = await schoolLogin({
+        schoolId: schoolId.trim().toUpperCase(),
         password,
       });
 
+      if (response.success) {
+        /*
+        -----------------------------------------
+        Save School Session
+        -----------------------------------------
+        */
+
+        loginSchool(response.school, response.token);
+
+        /*
+        -----------------------------------------
+        Redirect to Employee Login
+        -----------------------------------------
+        */
+
+        navigate("/login", { replace: true });
+      }
     } catch (err) {
       console.error(err);
-      setError(err.message || "Unable to login.");
+
+      setError(
+        err?.message ||
+          "Invalid School ID or Password."
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  /*
+  ---------------------------------------------------
+  Forgot Password
+  ---------------------------------------------------
+  */
 
   if (forgotPassword) {
     return (
@@ -96,10 +118,10 @@ function SchoolLoginForm() {
         onSubmit={handleSchoolLogin}
         className="mt-8 space-y-5"
       >
-        {/* School Code */}
+        {/* School ID */}
 
         <FormField
-          label="School Code"
+          label="School ID"
           required
         >
           <div className="relative">
@@ -110,10 +132,13 @@ function SchoolLoginForm() {
 
             <Input
               type="text"
-              placeholder="Enter your School Code"
-              value={schoolCode}
-              onChange={(e) => setSchoolCode(e.target.value.toUpperCase())}
+              placeholder="Enter your School ID"
+              value={schoolId}
+              onChange={(e) =>
+                setSchoolId(e.target.value.toUpperCase())
+              }
               className="pl-10"
+              autoComplete="username"
             />
           </div>
         </FormField>
@@ -136,12 +161,15 @@ function SchoolLoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="pl-10 pr-10"
+              autoComplete="current-password"
             />
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              onClick={() =>
+                setShowPassword((prev) => !prev)
+              }
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
             >
               {showPassword ? (
                 <EyeOff size={18} />
@@ -154,7 +182,7 @@ function SchoolLoginForm() {
 
         {/* Forgot Password */}
 
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={() => setForgotPassword(true)}
@@ -177,8 +205,11 @@ function SchoolLoginForm() {
           type="submit"
           className="w-full"
           loading={loading}
+          disabled={loading}
         >
-          {loading ? "Signing In..." : "Login to School"}
+          {loading
+            ? "Signing In..."
+            : "Login to School"}
         </Button>
       </form>
     </div>

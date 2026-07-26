@@ -47,12 +47,20 @@ function AdminDetailsStep({
       validationErrors.lastName = "Last name is required.";
     }
 
-    if (!data.email?.trim()) {
-      validationErrors.email = "Email address is required.";
+    if (!data.gender?.trim()) {
+      validationErrors.gender = "Gender is required.";
     }
 
-    if (!data.phone?.trim()) {
-      validationErrors.phone = "Phone number is required.";
+    if (!data.dateOfBirth) {
+      validationErrors.dateOfBirth = "Date of birth is required.";
+    }
+
+    if (!data.mobileNumber?.trim()) {
+      validationErrors.mobileNumber = "Mobile number is required.";
+    }
+
+    if (!data.employeeEmail?.trim()) {
+      validationErrors.employeeEmail = "Employee email is required.";
     }
 
     setErrors(validationErrors);
@@ -118,27 +126,74 @@ function AdminDetailsStep({
           required
         />
 
+        {/* Gender */}
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">
+            Gender <span className="text-red-500">*</span>
+          </label>
+
+          <select
+            name="gender"
+            value={data.gender}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+
+          {errors.gender && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.gender}
+            </p>
+          )}
+        </div>
+
         <FormInput
-          label="Email Address"
-          name="email"
-          type="email"
-          value={data.email}
+          label="Date of Birth"
+          name="dateOfBirth"
+          type="date"
+          value={data.dateOfBirth}
           onChange={handleChange}
-          error={errors.email}
-          placeholder="admin@school.com"
+          error={errors.dateOfBirth}
           required
         />
 
         <FormInput
-          label="Phone Number"
-          name="phone"
+          label="Mobile Number"
+          name="mobileNumber"
           type="tel"
-          value={data.phone}
+          value={data.mobileNumber}
           onChange={handleChange}
-          error={errors.phone}
+          error={errors.mobileNumber}
           placeholder="+91 9876543210"
           required
         />
+
+        <FormInput
+          label="Alternate Mobile Number"
+          name="alternateMobileNumber"
+          type="tel"
+          value={data.alternateMobileNumber}
+          onChange={handleChange}
+          placeholder="+91 9876543211"
+        />
+
+        <div className="md:col-span-2">
+          <FormInput
+            label="Employee Email"
+            name="employeeEmail"
+            type="email"
+            value={data.employeeEmail}
+            onChange={handleChange}
+            error={errors.employeeEmail}
+            placeholder="admin@school.com"
+            required
+          />
+        </div>
 
       </div>
 
@@ -151,10 +206,10 @@ function AdminDetailsStep({
         </h3>
 
         <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-blue-800">
-          <li>Your School Code will be generated automatically.</li>
+          <li>Your School ID will be generated automatically.</li>
           <li>An Administrator Employee ID will be created.</li>
           <li>Secure login credentials will be generated.</li>
-          <li>Credentials will be sent to the registered email address.</li>
+          <li>Credentials will be sent to both the School Email and Employee Email.</li>
         </ul>
 
       </div>

@@ -1,25 +1,47 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8000",
-    headers: {
-        "Content-Type": "application/json",
-    },
+  baseURL: import.meta.env.VITE_BACKEND_API_URL,
+  timeout: 15000,
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  },
 });
 
-// Automatically attach JWT token
+// ==========================
+// Request Interceptor
+// ==========================
+
 api.interceptors.request.use(
-    (config) => {
+  (config) => {
+    const token = localStorage.getItem("token");
 
-        const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-        return config;
-    },
-    (error) => Promise.reject(error)
+// ==========================
+// Response Interceptor
+// ==========================
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      // window.location.href = "/login";
+    }
+
+    return Promise.reject(error);
+  }
 );
 
 export default api;
