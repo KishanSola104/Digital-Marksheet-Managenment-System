@@ -17,6 +17,10 @@ const corsOptions = {
     credentials: true                                          
 };
 
+/* Import By Kishan */
+// Routes
+const authRoutes = require("./routes/authRoutes");
+
 app.use(cors(corsOptions));
 
 app.use(express.json());

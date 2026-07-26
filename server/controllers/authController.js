@@ -126,7 +126,10 @@ const forgotPassword = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
 
-        const result = await authService.changePassword(req.body);
+        const result = await authService.changePassword(
+            req.user,
+            req.body
+        );
 
         return res.status(200).json(result);
 
