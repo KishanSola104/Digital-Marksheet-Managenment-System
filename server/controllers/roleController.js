@@ -1,5 +1,6 @@
 const roleService = require("../services/roleService");
 
+//Create Role
 const addRole = async (req, res) => {
     try {
 
@@ -19,7 +20,20 @@ const addRole = async (req, res) => {
     }
 };
 
+//Get All Role
+const getAllRole = async (req,res) => {
+    try{
+        const role = await roleService.getAllRole();
+        res.status(200).json(role);
+    }catch{
+        res.status(400).json({
+            success:false,
+            message:error.message
+        });
+    }
+};
 
+//Get Role By Id
 const getRole = async (req,res) =>{
     try {
         
@@ -39,5 +53,5 @@ const getRole = async (req,res) =>{
     }
 }
 module.exports = {
-    addRole,getRole
+    addRole, getAllRole, getRole
 };

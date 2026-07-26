@@ -96,3 +96,29 @@ response
         "status": "Active"
     }
 }
+
+3. roles -> http://localhost:8000/roles -> post
+->for adding roles
+request:
+    {
+        "roleId": 1,
+        "roleName": "SUPER_ADMIN"
+    }
+response:
+    {
+    "success": true,
+    "message": "Role added successfully.",
+    "role": {
+        "roleId": 1,
+        "roleName": "SUPER_ADMIN",
+        "_id": "6a64f3f39ea5b190bab29de2",
+        "createdAt": "2026-07-25T17:35:47.116Z",
+        "updatedAt": "2026-07-25T17:35:47.116Z",
+        "__v": 0
+    }
+}
+
+-> get All Roles :  http://localhost:8000/roles -> get
+
+-> get Role By id:  http://localhost:8000/roles/1  ->get  (1 is the roleId)
+

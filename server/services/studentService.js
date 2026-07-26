@@ -1,4 +1,3 @@
-const { updateStudentById } = require('../controllers/studentController');
 const studentModel = require('../models/studentModel');
 const bcrypt = require('bcrypt');
 

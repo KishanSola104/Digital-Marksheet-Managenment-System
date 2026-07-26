@@ -2,13 +2,9 @@ const mongoose = require("mongoose");
 
 const schoolConfigSchema = new mongoose.Schema(
     {
-        configId:{type: String,unique:true,required:true},
-
-        schoolName:{type: String, required: true},
-
         schoolId:{type: String, unique: true, required: true},
 
-        currentAdmissionYear:{type: String, required:true},
+        schoolName:{type: String, required: true},
 
         address:{type: String, required: true},
 
@@ -16,9 +12,9 @@ const schoolConfigSchema = new mongoose.Schema(
 
         email:{type: String, unique: true, required: true},
 
-        principalName:{type: String, required: true},
+        websiteURL:{type: String, default: null, trim: true},
 
-        currentAcademicYearId:{type: mongoose.Schema.Types.ObjectId, ref: "AcademicYear", required: true}
+        schoolLogo:{type: String, default: null, trim: true}
     },
     {
         timestamps: true

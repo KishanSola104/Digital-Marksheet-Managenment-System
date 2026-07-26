@@ -4,11 +4,8 @@ const employeeService = require('../services/employeeService');
 const createEmployee = async (req, res) => {
     try {
         const employee = await employeeService.createEmployee(req.body);
-        res.status(201).json({
-            success: true,
-            data: employee
-        });
-    } catch (error) {
+        res.status(201).json(employee);
+    }catch(error){
         res.status(400).json({
             success: false,
             message: error.message
@@ -21,12 +18,11 @@ const createEmployee = async (req, res) => {
 const getEmployee = async (req,res) => {
     try{
         const employee = await employeeService.getEmployee();
-        res.status(201).json({
-            success: true,
-            data: employee
-        });
+        res.status(201).json(employee);
     } catch(error){
         res.status(400).json({
+            success:false,
+            message:error.message
         });
     }
 };
@@ -35,12 +31,11 @@ const getEmployee = async (req,res) => {
 const getEmployeeById = async (req,res) => {
     try{
         const employee = await employeeService.getEmployeeById(req.params.id);
-        res.status(201).json({
-            success: true,
-            data: employee
-        });
+        res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
+            success: false,
+            message: error.message
         });
     }
 };
@@ -49,12 +44,11 @@ const getEmployeeById = async (req,res) => {
 const getEmployeeByName = async (req,res) => {
     try{
         const employee = await employeeService.getEmployeeByName(req.params.name);
-        res.status(201).json({
-            success:true,
-            data: employee
-        });
+        res.status(201).json(employee);
     }catch(error){
-        res.status(400).json({ 
+        res.status(400).json({
+            success: false,
+            message: error.message
         });
     }
 };
@@ -63,12 +57,11 @@ const getEmployeeByName = async (req,res) => {
 const updateEmployeeById = async (req,res) => {
     try{
         const updateEmployee = await employeeService.updateEmployeeById(req.params.id,req.body);
-        res.status(201).json({
-            success:true,
-            data: updateEmployee
-        });
+        res.status(201).json(updateEmployee);
     }catch(error){
         res.status(400).json({
+            success: false,
+            message: error.message
         });
     }
 };
@@ -78,12 +71,11 @@ const deleteById = async (req, res) => {
     try {
         const result = await employeeService.deleteById(req.params.id);
 
-        res.status(200).json({
-            message: result.message
-        });
+        res.status(200).json(result);
 
     } catch (error) {
         res.status(400).json({
+            success:false,
             message: error.message
         });
     }
@@ -96,21 +88,29 @@ const statusChangeById = async (req,res) => {
             req.params.id,
             req.body.status
         );
-        res.status(201).json({
-            message:"Status Changed",
-        });
+        res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
+            success: false,
+            message: error.message
         });
     }
 };
 
+//Get Employees By Email
+// const getEmployeesByEmail = async (req,res) => {
+//     try{
+//         const
+//     }
+// }
+
+//Get Employees By Role
 const getEmployeesByRole = async (req, res) => {
     try {
 
-        const { roleId } = req.params;
+        //const { roleId } = req.params;
 
-        const result = await employeeService.getEmployeesByRole(Number(roleId));
+        const result = await employeeService.getEmployeesByRole(req.params.roleId);
 
         if (!result.success) {
             return res.status(404).json(result);

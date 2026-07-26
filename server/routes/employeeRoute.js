@@ -61,5 +61,20 @@ router.patch(
     employeeController.statusChangeById
 );
 
+//Get Employee By Email
+/*router.get(
+    "/email/:email",
+    authenticate,
+    authorize(1),
+    employeeController.getEmployeesByEmail
+);*/
+
+// Get Employee By Role
+router.get(
+    "/role/:roleId",
+    authenticate,
+    authorize(1),
+    employeeController.getEmployeesByRole
+);
 
 module.exports = router;

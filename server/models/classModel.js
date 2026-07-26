@@ -6,7 +6,7 @@ const classSchema = new mongoose.Schema(
         
         standard: {type:String, required:true},
         
-        academicYearId: {type:mongoose.Schema.Types.ObjectId, ref: "AcademicYear", required:true},
+        academicYearId: {type:String, required:true},
         
         totalStudents: {type:Number, required:true, min:0},
         

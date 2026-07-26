@@ -31,10 +31,25 @@ const addRole = async (roleData) => {
         };
 
     } catch (error) {
-        throw error;
+        throw new Error(`Error While Creating Role: ${error.message}`);
     }
 };
 
+//Get All Roles
+const getAllRole = async () => {
+    try{
+        const role = await Role.find();
+        return{
+            success:true,
+            message:"All Role Fetched Successfully",
+            data:role
+        };
+    }catch(error){
+        throw new Error(`Error while Fetching Roles: ${error.message}`);
+    }
+};
+
+//Get Role By Id
 const getRole = async(id)=>{
     try {
 
@@ -60,5 +75,5 @@ const getRole = async(id)=>{
 }
 
 module.exports = {
-    addRole,getRole
+    addRole, getAllRole, getRole
 };
