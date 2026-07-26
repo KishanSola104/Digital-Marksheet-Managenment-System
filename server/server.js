@@ -32,6 +32,9 @@ app.use('/login', userRoute)
 app.use('/students', studentRoute);
 app.use("/roles", roleRoutes);
 
+/* Added By Kishan */
+app.use("/api/auth", authRoutes);
+
 
 const PORT = process.env.PORT || 8080;
 
