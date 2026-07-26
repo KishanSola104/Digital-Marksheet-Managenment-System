@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 const generateSchoolToken = (school) => {
     return jwt.sign(
         {
+            _id: school._id,
             schoolId: school.schoolId,
-            id: school._id,
             type: "school",
         },
         process.env.JWT_SECRET,
@@ -23,9 +23,9 @@ const generateSchoolToken = (school) => {
 const generateEmployeeToken = (employee) => {
     return jwt.sign(
         {
+            _id: employee._id,
             employeeId: employee.employeeId,
-            id: employee._id,
-            roleIds: employee.role,
+            roleIds: employee.roleIds,
             type: "employee",
         },
         process.env.JWT_SECRET,

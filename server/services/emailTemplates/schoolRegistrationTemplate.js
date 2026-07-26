@@ -2,7 +2,6 @@ const schoolRegistrationTemplate = ({
     schoolName,
     schoolId,
     password,
-    loginUrl,
 }) => {
     return `
         <div style="font-family: Arial, sans-serif;">
@@ -35,12 +34,6 @@ const schoolRegistrationTemplate = ({
 
             <br>
 
-            <p>
-                Login Here:
-                <a href="${loginUrl}">
-                    ${loginUrl}
-                </a>
-            </p>
 
             <br>
 
