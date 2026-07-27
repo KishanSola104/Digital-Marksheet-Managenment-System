@@ -1,15 +1,47 @@
 const employeeModel = require('../models/employeeModel');
 const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
+const generateUserId = require("./helpers/generateUserId");
+const schoolModel = require('../models/schoolModel');
+const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
+const { sendEmail } = require("./emailService");
+const generatePassword = require("./helpers/generatePassword");
 
 const employeeService = {
 
     //Create Employee
-    createEmployee: async (employeeData) => {
-        // mail functionality to be added
+    createEmployee: async (employeeData,schoolId) => {
+        
         try {
+            const empPass = generatePassword(employeeData.firstName);
+            const school = await schoolModel.findOne({
+                _id:schoolId,
+            })
+            const schoolName = school.schoolName;
+            const employeeId = await generateUserId(schoolName, employeeData.firstName, employeeData.lastName);
             const employee = new employeeModel(employeeData);
+            employee.employeeId = employeeId;
+            employee.schoolId = schoolId;
             await employee.save();
+            await sendEmail({
+                  to: employee.email,
+            
+                  subject: "Account Created",
+            
+                  html: employeeCredentialsTemplate({
+                    employeeName: `${employee.firstName} ${employee.lastName}`,
+            
+                    employeeId: employee.employeeId,
+            
+                    userId:  employee.employeeId,
+            
+                    password: empPass,
+                    //better to keep roles
+                    designation: employee.designation,
+            
+                    loginUrl: `${process.env.CLIENT_URL}/login`,
+                  }),
+                });
             return {
                 success:true,
                 message: 'Employee created successfully',
@@ -36,9 +68,9 @@ const employeeService = {
     },
 
     //Get by Id
-    getEmployeeById: async (id) => {
+    getEmployeeById: async (userId) => {
         try {
-            const employee = await employeeModel.findOne({ employeeId: id });
+            const employee = await employeeModel.findOne({ employeeId: userId });
             if (!employee) {
                 throw new Error("Employee Not Found");
             }

@@ -1,9 +1,11 @@
 const employeeService = require('../services/employeeService');
 
+
 //Create Employee
 const createEmployee = async (req, res) => {
     try {
-        const employee = await employeeService.createEmployee(req.body);
+        const schoolId = req.user.schoolId;
+        const employee = await employeeService.createEmployee(req.body,schoolId);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({

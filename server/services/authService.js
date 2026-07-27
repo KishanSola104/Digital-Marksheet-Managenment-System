@@ -146,7 +146,6 @@ const registerSchool = async (data) => {
     // ============================
     // Create User
     // ============================
-
     const user = await User.create({
       userId,
 
@@ -397,6 +396,11 @@ const employeeLogin = async (data) => {
       userId: userId.toUpperCase(),
     }).populate("employeeId");
 
+
+    const emp = await Employee.findOne({
+      employeeId: userId.toUpperCase()
+    }).populate("employeeId");
+
     if (!user) {
       throw new Error("Invalid User ID or Password.");
     }
@@ -422,11 +426,13 @@ const employeeLogin = async (data) => {
     // ==========================
     // Generate JWT
     // ==========================
-
+    // console.log("here:"+emp.schoolId);
     const token = generateEmployeeToken({
       _id: user.employeeId._id,
 
       employeeId: user.employeeId.employeeId,
+
+      schoolId:emp.schoolId,
 
       roleIds: user.roleIds,
     });
