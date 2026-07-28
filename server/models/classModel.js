@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const classSchema = new mongoose.Schema(
     {
+        schoolId:{type:String, required:true},
+        
         classId: {type:String, unique:true, required:true},
         
         standard: {type:String, required:true},

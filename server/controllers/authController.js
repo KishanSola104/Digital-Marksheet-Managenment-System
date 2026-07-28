@@ -6,7 +6,6 @@ const authService = require("../services/authService");
 const registerSchool = async (req, res) => {
     try {
         const result = await authService.registerSchool(req.body);
-
         return res.status(201).json(result);
 
     } catch (error) {
