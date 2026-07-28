@@ -27,6 +27,7 @@ const generateEmployeeToken = (employee) => {
             employeeId: employee.employeeId,
             roleIds: employee.roleIds,
             type: "employee",
+            schoolId:employee.schoolId,
         },
         process.env.JWT_SECRET,
         {

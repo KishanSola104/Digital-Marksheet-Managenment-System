@@ -8,8 +8,7 @@ const employeeSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
-    // Reference to the School
+    
     schoolId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "School",

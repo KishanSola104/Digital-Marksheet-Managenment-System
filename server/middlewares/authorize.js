@@ -8,18 +8,20 @@ const authorize = (...allowedRoleIds) => {
                     message: "Unauthorized"
                 });
             }
-            // console.log(req,user)
+            // console.log(req.user)
             // console.log(req.user.roleIds);
             // console.log(allowedRoleIds);
 
             const userRoles = req.user.roleIds;
 
             let hasAccess = false;
-            allowedRoleIds.forEach( val => {
-                if(val === userRoles){
-                    hasAccess = true;
+            for(i=0;i<userRoles.length;i++){
+                for(j=0;j<allowedRoleIds.length;j++){
+                    if(userRoles[i] === allowedRoleIds[j]){
+                        hasAccess = true;
+                    }
                 }
-            });
+            }
 
             if (!hasAccess) {
                 return res.status(403).json({

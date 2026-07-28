@@ -5,7 +5,11 @@ const authService = require("../services/authService");
  */
 const registerSchool = async (req, res) => {
     try {
+<<<<<<< HEAD
         const result = await authService.registerSchool(req.body);
+=======
+        const result = await authService.registerSchool(req.body);  
+>>>>>>> 57223c004521e607d94a64600794e4decc43a387
         return res.status(201).json(result);
 
     } catch (error) {
