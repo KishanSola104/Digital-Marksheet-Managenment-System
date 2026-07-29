@@ -85,6 +85,7 @@ function LoginForm() {
       const response = await employeeLogin({
         email: email.trim(),
         password,
+        role
       });
 
       if (!response.success) {

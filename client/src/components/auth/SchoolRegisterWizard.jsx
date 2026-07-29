@@ -198,7 +198,6 @@ function SchoolRegisterWizard() {
     <div className="mx-auto w-full max-w-4xl">
 
       {/* Heading */}
-
       {currentStep !== 4 && (
         <div className="mb-8 text-center">
 
