@@ -1,5 +1,6 @@
 import api from "./api";
 
+//url must be with prefixed http://localhost:8000/api/
 // ===========================================
 // Common API Error Handler
 // ===========================================
@@ -20,7 +21,6 @@ const handleApiError = (error) => {
 // Register School
 export const registerSchool = async (schoolData) => {
   try {
-    //url must be with prefixed http://localhost:8000/api/
     const response = await api.post("http://localhost:8000/api/auth/register-school", schoolData);
     return response.data;
   } catch (error) {
@@ -56,6 +56,7 @@ export const verifySchool = async () => {
 export const employeeLogin = async (loginData) => {
   try {
     console.log(loginData);
+    
     const response = await api.post("http://localhost:8000/api/login", loginData);
     return response.data;
   } catch (error) {

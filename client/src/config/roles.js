@@ -6,6 +6,7 @@ export const ROLES = {
     OFFICE_STAFF: "OFFICE_STAFF",
 };
 
+// roles must be this as we store 1,2,3,4,5
 export const ROLES2 = {
     ADMIN:1,
     HEAD_TEACHER: 2,
