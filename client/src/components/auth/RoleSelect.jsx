@@ -1,19 +1,34 @@
 import { Select } from "../ui/SearchInput";
-import { ROLE_OPTIONS } from "../../config/roles";
 
 function RoleSelect({
-    value,
-    onChange,
-    disabled = false,
+  roles = [],
+  loading = false,
+  value,
+  onChange,
+  disabled = false,
 }) {
-    return (
-        <Select
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            options={ROLE_OPTIONS}
-        />
-    );
+  const roleOptions = [
+    {
+      value: "",
+      label: "-- Select Role --",
+    },
+    ...roles.map((role) => ({
+      value: String(role.roleId), 
+      label: role.roleName
+        .replaceAll("_", " ")
+        .toLowerCase()
+        .replace(/\b\w/g, (char) => char.toUpperCase()),
+    })),
+  ];
+
+  return (
+    <Select
+      value={value}
+      onChange={onChange}
+      disabled={disabled || loading}
+      options={roleOptions}
+    />
+  );
 }
 
 export default RoleSelect;

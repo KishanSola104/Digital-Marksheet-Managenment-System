@@ -145,6 +145,7 @@ export function Select({
         <option
           key={option.value}
           value={option.value}
+          disabled={option.value === ""}
         >
           {option.label}
         </option>
