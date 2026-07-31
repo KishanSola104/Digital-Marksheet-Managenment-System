@@ -12,7 +12,7 @@ const authorize = (...allowedRoleIds) => {
             // console.log(req.user.roleIds);
             // console.log(allowedRoleIds);
 
-            const userRoles = req.user.roleIds;
+            const userRoles = [req.user.roleIds];
 
             let hasAccess = false;
             for(i=0;i<userRoles.length;i++){
@@ -22,7 +22,7 @@ const authorize = (...allowedRoleIds) => {
                     }
                 }
             }
-
+            // console.log(hasAccess)
             if (!hasAccess) {
                 return res.status(403).json({
                     success: false,
