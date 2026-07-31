@@ -25,6 +25,8 @@ const authRoutes = require("./routes/authRoutes");
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+
 //DB Connection
 connectDB();
 

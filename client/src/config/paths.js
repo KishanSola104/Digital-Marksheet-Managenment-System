@@ -1,11 +1,10 @@
-import { ROLES } from "./roles";
 
 export const ROLE_BASE_PATHS = {
-    [ROLES.ADMIN]: "/admin",
-    [ROLES.HEAD_TEACHER]: "/head-teacher",
-    [ROLES.CLASS_TEACHER]: "/class-teacher",
-    [ROLES.SUBJECT_TEACHER]: "/subject-teacher",
-    [ROLES.OFFICE_STAFF]: "/office-staff",
+  ADMIN: "/admin",
+  HEAD_TEACHER: "/head-teacher",
+  CLASS_TEACHER: "/class-teacher",
+  SUBJECT_TEACHER: "/subject-teacher",
+  OFFICE_STAFF: "/office-staff",
 };
 
 export const ADMIN_PATHS = {
