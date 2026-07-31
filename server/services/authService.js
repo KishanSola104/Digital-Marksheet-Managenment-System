@@ -43,6 +43,7 @@ const registerSchool = async (data) => {
       role,
     } = data;
 
+    // console.log(data);
     // ============================
     // Check Existing School
     // ============================
@@ -138,7 +139,7 @@ const registerSchool = async (data) => {
 
       designation,
 
-      role: Array.isArray(role) ? role : [role],
+      role: [1],
 
       status: "Active",
     });
@@ -151,7 +152,7 @@ const registerSchool = async (data) => {
 
       userName: `${firstName} ${lastName}`,
 
-      roleIds: Array.isArray(role) ? role : [role],
+      roleIds: [1],
 
       employeeId: employee._id,
 

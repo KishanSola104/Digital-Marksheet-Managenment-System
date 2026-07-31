@@ -7,8 +7,9 @@ const { getRole } = require("./roleService");
 
 const login = async (loginData) => {
   try {
-    const { userId, password, cnfPass, role } = loginData;
-
+    let { userId, password, cnfPass, role } = loginData;
+    role = Number(role);
+    // console.log(role);
     const emp = await Employee.findOne({
       employeeId: userId.toUpperCase(),
     });

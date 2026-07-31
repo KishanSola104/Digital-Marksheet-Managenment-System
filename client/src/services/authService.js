@@ -1,5 +1,6 @@
 import api from "./api";
 
+//url must be with prefixed http://localhost:8000/api/
 // ===========================================
 // Common API Error Handler
 // ===========================================
@@ -20,7 +21,7 @@ const handleApiError = (error) => {
 // Register School
 export const registerSchool = async (schoolData) => {
   try {
-    const response = await api.post("/auth/register-school", schoolData);
+    const response = await api.post("http://localhost:8000/api/auth/register-school", schoolData);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -30,7 +31,7 @@ export const registerSchool = async (schoolData) => {
 // School Login
 export const schoolLogin = async (loginData) => {
   try {
-    const response = await api.post("/auth/school-login", loginData);
+    const response = await api.post("http://localhost:8000/api/auth/school-login", loginData);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -40,7 +41,7 @@ export const schoolLogin = async (loginData) => {
 // Verify Logged-in School
 export const verifySchool = async () => {
   try {
-    const response = await api.get("/auth/verify-school");
+    const response = await api.get("http://localhost:8000/api/auth/verify-school");
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -54,7 +55,9 @@ export const verifySchool = async () => {
 // Employee Login
 export const employeeLogin = async (loginData) => {
   try {
-    const response = await api.post("/auth/employee-login", loginData);
+    console.log(loginData);
+    
+    const response = await api.post("http://localhost:8000/api/login", loginData);
     return response.data;
   } catch (error) {
     handleApiError(error);
