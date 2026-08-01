@@ -20,8 +20,9 @@ const handleApiError = (error) => {
 
 // Register School
 export const registerSchool = async (schoolData) => {
+  console.log(import.meta.env.VITE_BACKEND_API_URL);
   try {
-    const response = await api.post("http://localhost:8000/api/auth/register-school", schoolData);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/register-school", schoolData);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -31,7 +32,7 @@ export const registerSchool = async (schoolData) => {
 // School Login
 export const schoolLogin = async (loginData) => {
   try {
-    const response = await api.post("http://localhost:8000/api/auth/school-login", loginData);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/school-login", loginData);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -41,7 +42,7 @@ export const schoolLogin = async (loginData) => {
 // Verify Logged-in School
 export const verifySchool = async () => {
   try {
-    const response = await api.get("http://localhost:8000/api/auth/verify-school");
+    const response = await api.get(import.meta.env.VITE_BACKEND_API_URL+"/auth/verify-school");
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -57,7 +58,7 @@ export const employeeLogin = async (loginData) => {
   try {
     console.log(loginData);
     
-    const response = await api.post("http://localhost:8000/api/login", loginData);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/login", loginData);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -67,7 +68,7 @@ export const employeeLogin = async (loginData) => {
 // Forgot Password
 export const forgotPassword = async (data) => {
   try {
-    const response = await api.post("/auth/forgot-password", data);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/forgot-password", data);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -77,7 +78,7 @@ export const forgotPassword = async (data) => {
 // Change Password
 export const changePassword = async (data) => {
   try {
-    const response = await api.post("/auth/change-password", data);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/change-password", data);
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -87,7 +88,7 @@ export const changePassword = async (data) => {
 // Logout
 export const logout = async () => {
   try {
-    const response = await api.post("/auth/logout");
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/logout");
     return response.data;
   } catch (error) {
     handleApiError(error);

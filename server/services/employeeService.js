@@ -6,16 +6,17 @@ const schoolModel = require('../models/schoolModel');
 const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
 const { sendEmail } = require("./emailService");
 const generatePassword = require("./helpers/generatePassword");
-
+const User = require("../models/userModel");
 const employeeService = {
 
     //Create Employee
-    createEmployee: async (employeeData,schoolId) => {
-        
+    createEmployee: async (employeeData, schoolId) => {
+
         try {
-            const empPass = generatePassword(employeeData.firstName);
+            const password = generatePassword(employeeData.firstName);
+            const hashedPassword = await bcrypt.hash(password, 10);
             const school = await schoolModel.findOne({
-                _id:schoolId,
+                _id: schoolId,
             })
             const schoolName = school.schoolName;
             const employeeId = await generateUserId(schoolName, employeeData.firstName, employeeData.lastName);
@@ -24,26 +25,40 @@ const employeeService = {
             employee.schoolId = schoolId;
             await employee.save();
             await sendEmail({
-                  to: employee.email,
-            
-                  subject: "Account Created",
-            
-                  html: employeeCredentialsTemplate({
+                to: employee.email,
+
+                subject: "Account Created",
+
+                html: employeeCredentialsTemplate({
+                
                     employeeName: `${employee.firstName} ${employee.lastName}`,
-            
+
                     employeeId: employee.employeeId,
-            
-                    userId:  employee.employeeId,
-            
-                    password: empPass,
-                    //better to keep roles
+
+                    userId: employee.employeeId,
+
                     designation: employee.designation,
-            
+
+                    password : password,
+
                     loginUrl: `${process.env.CLIENT_URL}/login`,
-                  }),
-                });
+                }),
+            });
+
+            
+
+            user = await User.create({
+                userId: employee.employeeId,
+                userName: employee.firstName,
+                password: hashedPassword,
+                roleIds: employee.role,
+                employeeId: employee._id,
+                status: "Active",
+            });
+
+
             return {
-                success:true,
+                success: true,
                 message: 'Employee created successfully',
                 employee: employee
             }
@@ -58,7 +73,7 @@ const employeeService = {
 
             const employees = await employeeModel.find();
             return {
-                success:true,
+                success: true,
                 message: "Employees Fetched",
                 employees: employees
             };
@@ -75,7 +90,7 @@ const employeeService = {
                 throw new Error("Employee Not Found");
             }
             return {
-                success:true,
+                success: true,
                 message: "Employee Fetched",
                 employee: employee
             };
@@ -93,7 +108,7 @@ const employeeService = {
                 throw new Error("Employee Not Found");
             }
             return {
-                success:true,
+                success: true,
                 message: "Employee Fetched",
                 employee: employee
             };
@@ -108,15 +123,15 @@ const employeeService = {
             const employee = await employeeModel.findOneAndUpdate(
                 { employeeId: id },
                 { $set: updateData },
-                {returnDocument:'after'}
+                { returnDocument: 'after' }
             );
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
             return {
-                success:true,
+                success: true,
                 message: "Employee Updated Successfully",
-                data:employee
+                data: employee
             };
         } catch (error) {
             throw new Error(`Error While Updating Employee: ${error.message}`);
@@ -126,20 +141,20 @@ const employeeService = {
     //Delete By Id
     deleteById: async (id) => {
         try {
-    
+
             const employee = await employeeModel.findOneAndDelete({
                 employeeId: id
             });
-    
+
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
-    
+
             return {
-                success:true,
+                success: true,
                 message: "Employee Deleted Successfully"
             };
-    
+
         } catch (error) {
             throw new Error(`Error While Deleting Employee: ${error.message}`);
         }
@@ -152,12 +167,12 @@ const employeeService = {
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
-            employee.status = employee.status === "Active"?"Inactive" : "Active";
+            employee.status = employee.status === "Active" ? "Inactive" : "Active";
             await employee.save();
             return {
-                success:true,
+                success: true,
                 message: "Employee Status Changed Successfully",
-                data:employee
+                data: employee
             };
         } catch (error) {
             throw new Error(`Error Changing Status: ${error.message}`);
@@ -167,26 +182,26 @@ const employeeService = {
     // Get Employee By Email
     getEmployeesByEmail: async (email) => {
         try {
-            const employee = await employeeModel.findOne({email:email});
+            const employee = await employeeModel.findOne({ email: email });
 
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
 
             return {
-                success:true,
+                success: true,
                 message: "Employee Fetched",
                 employee: employee
             };
         } catch (error) {
             throw new Error(`Error While Fetching Employee By Email: ${error.message}`);
         }
-    },  
+    },
 
     //Get Employee By Role
-    getEmployeesByRole : async (roleId) => {
+    getEmployeesByRole: async (roleId) => {
         try {
-            const employees = await employeeModel.find({role:roleId});
+            const employees = await employeeModel.find({ role: roleId });
 
             if (employees.length === 0) {
                 return {
@@ -194,12 +209,12 @@ const employeeService = {
                     message: "No employees found for this role."
                 };
             }
-    
+
             return {
                 success: true,
                 employees
             };
-    
+
         } catch (error) {
             throw new Error(`Error While Fetching By Role: ${error.message}`);
         }

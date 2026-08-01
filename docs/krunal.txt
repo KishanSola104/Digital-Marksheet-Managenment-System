@@ -132,3 +132,18 @@ const markSchema = new mongoose.Schema(
 
 module.exports = mongoose.model("Mark", markSchema);
 
+
+
+VITE_BACKEND_API_URL=http://localhost:8000/api
+env is written above
+
+// Verify Logged-in School
+export const verifySchool = async () => {
+  try {
+    const response = await api.get(import.meta.env.VITE_BACKEND_API_URL+"/auth/verify-school");
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+checking will be done as shown above
