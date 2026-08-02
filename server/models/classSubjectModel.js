@@ -2,25 +2,21 @@ const mongoose = require("mongoose");
 
 const classSubjectSchema = new mongoose.Schema(
     {
-        classSubjectId:{type:String, unique:true, required:true},
-        
-        classId:{type:String, required:true},
-        
-        sectionId:{type:String, required:true},
-        
-        subjectId:{type:String, required:true},
-        
-        subjectTeacherId:{type:String, required:true},
-        
-        credit:{type:Number, required:true},
-        
-        passingMarks:{type:Number, required:true},
-        
-        status:{type:String, enum:["Active","Inactive"], default:"Active"}
+        classSubjectId: { type: String, unique: true, required: true, trim: true },
+
+        classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class", required: true },
+
+        sectionId: { type: mongoose.Schema.Types.ObjectId, ref: "Section", required: true },
+
+        subjectId: { type: mongoose.Schema.Types.ObjectId, ref: "Subject", required: true },
+
+        subjectTeacherId: { type: mongoose.Schema.Types.ObjectId, ref: "Employee", required: true },
+
+        status: { type: String, enum: ["Active", "Inactive"], default: "Active" }
     },
     {
-        timestamps:true
+        timestamps: true
     }
 )
 
-module.exports = mongoose.model("ClassSubject",classSubjectSchema);
+module.exports = mongoose.model("ClassSubject", classSubjectSchema);

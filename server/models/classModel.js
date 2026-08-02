@@ -2,20 +2,20 @@ const mongoose = require("mongoose");
 
 const classSchema = new mongoose.Schema(
     {
-        schoolId:{type:String, required:true},
-        
-        classId: {type:String, unique:true, required:true},
-        
-        standard: {type:String, required:true},
-        
-        academicYearId: {type:String, required:true},
-        
-        totalStudents: {type:Number, required:true, min:0},
-        
-        status: {type:String, enum: ["Active","Inactive"], default:"Active"}
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref: "School", required: true },
+
+        classId: { type: String, unique: true, required: true, trim: true },
+
+        standard: { type: String, required: true, trim: true },
+
+        academicYearId: { type: mongoose.Schema.Types.ObjectId, ref: "AcademicYear", required: true },
+
+        maximumCapacity: { type: Number, required: true, min: 1 },
+
+        status: { type: String, enum: ["Active", "Inactive"], default: "Active" }
     },
     {
-        timestamps:true
+        timestamps: true
     }
 )
 

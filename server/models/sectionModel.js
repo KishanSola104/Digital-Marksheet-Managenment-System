@@ -2,21 +2,21 @@ const mongoose = require("mongoose");
 
 const sectionSchema = new mongoose.Schema(
     {
-        sectionId:{type:String, unique:true, required:true},
-        
-        classId:{type:String, required:true},
-        
-        section:{type:String, required:true},
-        
-        classTeacherId:{type:String, required:true},
-        
-        totalStudents:{type:Number, required:true},
-        
-        status:{type:String, enum:["Active","Inactive"], default:"Active"}
+        sectionId: { type: String, unique: true, required: true },
+
+        classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class", required: true },
+
+        section: { type: String, required: true, trim: true, uppercase: true },
+
+        classTeacherId: { type: mongoose.Schema.Types.ObjectId, ref: "Employee", required: true },
+
+        maximumCapacity: { type: Number, required: true, min: 1 },
+
+        status: { type: String, enum: ["Active", "Inactive"], default: "Active" }
     },
     {
-        timestamps:true
+        timestamps: true
     }
 )
 
-module.exports = mongoose.model("Section",sectionSchema);
+module.exports = mongoose.model("Section", sectionSchema);

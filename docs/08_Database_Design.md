@@ -1,8 +1,8 @@
 Every collection: 
 1. academicYearModel:
-        academicYearId: {type:String, unique:true, required:true}
+        academicYearId: {type:String, unique:true, required:true, trim:true}
 
-        year: {type:String, unique:true, required:true}
+        year: {type:String, unique:true, required:true, trim:true}
 
         startDate: {type:Date, required:true}
 
@@ -10,48 +10,66 @@ Every collection:
 
         isCurrent: {type:Boolean, default:false}
 
+        isCompleted: {type:Boolean, default:false}
+
         status: {type:String, enum:["Active","Inactive"], default:"Active"}
 
         timestamps:true
 
 
-2. classModel:
-        schoolId:{type:String, required:true}
+2. auditLogModel:
+        auditLogId: {type: String,unique: true,required: true}
+
+        userId: {type: mongoose.Schema.Types.ObjectId,ref: "User",required: true}
+
+        action: {type: String,enum: ["CREATE","UPDATE","DELETE","LOGIN","LOGOUT","PASSWORD_CHANGE","STATUS_CHANGE"],required: true}
+
+        entity: {type: String,required: true,enum: ["School","AcademicYear", "Employee","User","Student", "Class","Section","Subject","Exam","Mark","Role","Notification"]}
+
+        entityId: {type: mongoose.Schema.Types.ObjectId,required: true}
+
+        oldData: {type: mongoose.Schema.Types.Mixed,default: null}
+
+        newData: {type: mongoose.Schema.Types.Mixed,default: null}
+
+        ipAddress: {type: String,default: null}
+
+        timestamps: true
+
+
+3. classModel:
+        schoolId:{type:mongoose.Schema.Types.ObjectId, ref:"School", required:true}
         
-        classId: {type:String, unique:true, required:true}
+        classId: {type:String, unique:true, required:true, trim:true}
         
-        standard: {type:String, required:true}
+        standard: {type:String, required:true, trim:true}
         
-        academicYearId: {type:String, required:true}
+        academicYearId: {type:mongoose.Schema.Types.ObjectId, ref:"AcademicYear", required:true}
         
-        totalStudents: {type:Number, required:true, min:0}
+        maximumCapacity: {type:Number, required:true, min:1}
         
         status: {type:String, enum: ["Active","Inactive"], default:"Active"}
+
+        timestamps:true
+    
+
+4. classSubjectModel:
+        classSubjectId:{type:String, unique:true, required:true, trim:true}
+        
+        classId:{type:mongoose.Schema.Types.ObjectId, ref:"Class", required:true}
+        
+        sectionId:{type:mongoose.Schema.Types.ObjectId, ref:"Section", required:true}
+        
+        subjectId:{type:mongoose.Schema.Types.ObjectId, ref:"Subject", required:true}
+        
+        subjectTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true}
+        
+        status:{type:String, enum:["Active","Inactive"], default:"Active"}
     
         timestamps:true
 
 
-3. classSubjectModel:
-        classSubjectId:{type:String, unique:true, required:true}
-        
-        classId:{type:String, required:true}
-        
-        sectionId:{type:String, required:true}
-        
-        subjectId:{type:String, required:true}
-        
-        subjectTeacherId:{type:String, required:true}
-        
-        credit:{type:Number, required:true}
-        
-        passingMarks:{type:Number, required:true}
-        
-        status:{type:String, enum:["Active","Inactive"], default:"Active"}
-
-        timestamps:true
-
-
-4. counterModel:
+5. counterModel:
         name:{type: String, required: true, unique: true}
 
         sequence:{type: Number, default: 0}
@@ -59,7 +77,7 @@ Every collection:
         timestamps: true
 
 
-5. employeeModel:
+6. employeeModel:
         employeeId: {type: String, unique: true, required: true, trim: true, uppercase: true}
 
         schoolId: {type: mongoose.Schema.Types.ObjectId, ref: "School", required: true}
@@ -95,19 +113,23 @@ Every collection:
         timestamps: true
 
 
-6. examModel:
-        examId:{type:String, unique:true, required:true}
+7. examModel:
+        examId:{type:String, unique:true, required:true, trim:true}
         
-        examName:{type:String, unique:true, required:true}
+        examName:{type:String, required:true, trim:true}
         
-        classId:{type:mongoose.Schema.Types.ObjectId, ref:"Class", required:true}
+        classIds:[
+            {
+                type:mongoose.Schema.Types.ObjectId, ref:"Class", required:true
+            }
+        ]
         
         academicYearId:{type:mongoose.Schema.Types.ObjectId, ref:"AcademicYear", required:true}
         
         startDate:{type:Date, required:true}
         
         endDate:{type:Date, required:true}
-    
+        
         resultPublished:{type:Boolean, default:false}
         
         status:{type:String, enum:["Active", "Inactive"], default:"Active"}
@@ -115,7 +137,7 @@ Every collection:
         timestamps:true
 
 
-7.  idCounterModel:
+8.  idCounterModel:
         counterId:{type:String, unique:true, required:true}
 
         entityName:{type:String, unique:true, required:true}
@@ -127,7 +149,7 @@ Every collection:
         timestamps:true
     
 
-8.  markModel:
+9.  markModel:
         markId:{type:String, unique:true, required:true}
 
         studentId:{type:mongoose.Schema.Types.ObjectId, ref:"Student", required:true}
@@ -159,7 +181,39 @@ Every collection:
         timestamps:true
     
 
-9.  roleModel:
+10.  notificationModel:
+        notificationId: { type: String, unique: true, required: true }
+
+        receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
+
+        title: { type: String, required: true, trim: true }
+
+        message: { type: String, required: true, trim: true }
+
+        type: { type: String, enum: ["GENERAL", "ACADEMIC", "EXAM", "ASSIGNMENT", "ATTENDANCE", "FEE", "LEAVE", "HOLIDAY", "SYSTEM"], default: "GENERAL" }
+
+        isRead: { type: Boolean, default: false }
+
+        readAt: { type: Date, default: null }
+    
+        timestamps: true
+    
+
+11. otpModel:
+        email: { type: String, required: true, lowercase: true, trim: true }
+
+        otp: { type: String, required: true }
+
+        purpose: { type: String, enum: ["REGISTER", "LOGIN", "FORGOT_PASSWORD", "EMAIL_VERIFICATION"], required: true }
+
+        expiresAt: { type: Date, required: true }
+
+        isVerified: { type: Boolean, default: false }
+    
+        timestamps: true
+
+    
+12.  roleModel:
          roleCode: { type: String, required: true, unique: true, uppercase: true, trim: true }
 
         roleName: { type: String, required: true, unique: true, trim: true }
@@ -171,25 +225,7 @@ Every collection:
         timestamps: true
 
 
-10. schoolConfigModel:
-        schoolId:{type: String, unique: true, required: true}
-
-        schoolName:{type: String, required: true}
-
-        address:{type: String, required: true}
-
-        contactNumber:{type: String, required: true}
-
-        email:{type: String, unique: true, required: true}
-
-        websiteURL:{type: String, default: null, trim: true}
-
-        schoolLogo:{type: String, default: null, trim: true}
-    
-        timestamps: true
- 
-
-11. schoolModel:
+13. schoolModel:
         schoolId: { type: String, required: true, unique: true, trim: true }
 
         schoolName: { type: String, required: true, trim: true }
@@ -211,25 +247,28 @@ Every collection:
         timestamps: true
 
 
-12. sectionModel:
+14. sectionModel:
         sectionId:{type:String, unique:true, required:true}
         
-        classId:{type:String, required:true}
+        classId:{type:mongoose.Schema.Types.ObjectId, ref:"Class", required:true}
         
-        section:{type:String, required:true}
+        section:{type:String, required:true, trim:true, uppercase:true}
         
-        classTeacherId:{type:String, required:true}
+        classTeacherId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee", required:true}
         
-        totalStudents:{type:Number, required:true}
+        maximumCapacity:{type:Number, required:true, min:1}
         
         status:{type:String, enum:["Active","Inactive"], default:"Active"}
     
         timestamps:true
+    
 
 
-13. studentModel:
+15. studentModel:
         studentId: {type:String, unique:true, required:true}
         
+        schoolId: {type:mongoose.Schema.Types.ObjectId, ref:"School", required:true}
+
         admissionNo:{type:String, unique:true, required:true}
         
         admissionClass:{type: String, required:true}
@@ -277,17 +316,23 @@ Every collection:
         timestamps:true
     
     
-14. subjectModel: 
+16. subjectModel: 
         subjectId:{type:String, unique:true, required:true}
+
+        subjectCode:{type:String, unique:true, required:true, trim:true, uppercase:true}
         
-        subjectName:{type:String, unique:true, required:true}
+        subjectName:{type:String, unique:true, required:true, trim:true}
+
+        description:{type:String, default:null, trim:true}
+
+        passingMarks:{type:Number, required:true, min:0}
         
         status:{type:String, enum:["Active","Inactive"], default:"Active"}
     
         timestamps:true
     
 
-15. userModel:
+17. userModel:
         employeeId: { type: mongoose.Schema.Types.ObjectId, ref: "Employee", required: true, unique: true }
 
         userId: { type: String, required: true, unique: true, uppercase: true, trim: true }

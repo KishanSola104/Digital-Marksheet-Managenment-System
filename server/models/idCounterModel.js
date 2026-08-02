@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 
 const idCounterSchema = new mongoose.Schema(
     {
-        counterId:{type:String, unique:true, required:true},
+        counterId: { type: String, unique: true, required: true },
 
-        entityName:{type:String, unique:true, required:true},
+        entityName: { type: String, unique: true, required: true },
 
-        prefix:{type:String, required:true},
+        prefix: { type: String, required: true },
 
-        lastSequenceNumber:{type:Number, default:0}
+        lastSequenceNumber: { type: Number, default: 0 }
     },
     {
-        timestamps:true
+        timestamps: true
     }
 )
 
