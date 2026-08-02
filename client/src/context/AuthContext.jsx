@@ -44,16 +44,16 @@ function AuthProvider({ children }) {
     }, []);
 
     /*
-    -----------------------------------------
-    Base Path
-    -----------------------------------------
-    */
+-----------------------------------------
+Base Path
+-----------------------------------------
+*/
 
-    const basePath = useMemo(() => {
-        if (!user) return "";
+const basePath = useMemo(() => {
+    if (!user || !user.role) return "";
 
-        return ROLE_BASE_PATHS[user.role] || "";
-    }, [user]);
+    return ROLE_BASE_PATHS[user.role.code] || "";
+}, [user]);
 
     /*
     -----------------------------------------
@@ -61,13 +61,13 @@ function AuthProvider({ children }) {
     -----------------------------------------
     */
 
-    function login(userData, jwtToken) {
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", jwtToken);
+  function login(userData, jwtToken) {
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", jwtToken);
 
-        setUser(userData);
-        setToken(jwtToken);
-    }
+    setUser(userData);
+    setToken(jwtToken);
+}
 
     /*
     -----------------------------------------

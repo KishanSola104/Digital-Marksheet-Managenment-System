@@ -99,7 +99,13 @@ function LoginForm() {
       -----------------------------------------
       */
 
-      login(response.user, response.token);
+      login(
+        {
+          ...response.user,
+          employee: response.employee,
+        },
+        response.token,
+      );
 
       /*
       -----------------------------------------
@@ -107,7 +113,7 @@ function LoginForm() {
       -----------------------------------------
       */
 
-      const dashboardPath = ROLE_BASE_PATHS[response.user.role] || "/";
+      const dashboardPath = ROLE_BASE_PATHS[response.user.role.code] || "/";
 
       navigate(dashboardPath, {
         replace: true,
@@ -169,7 +175,7 @@ function LoginForm() {
               type="text"
               placeholder="Enter your User / Employee ID"
               value={userId}
-              onChange={(e)=>setUserId(e.target.value)}
+              onChange={(e) => setUserId(e.target.value)}
               className="pl-10"
               autoComplete="username"
             />

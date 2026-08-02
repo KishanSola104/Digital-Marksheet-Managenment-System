@@ -76,7 +76,7 @@ const login = async (loginData) => {
           role: roleName.message,
           designation: employee.designation,
           department: employee.department,
-          status: user.status,
+          status: user.accountStatus,
         },
       };
     }
@@ -127,7 +127,7 @@ const login = async (loginData) => {
         role: roleName.message,
         designation: employee.designation,
         department: employee.department,
-        status: user.status,
+        status: user.accountStatus,
       },
     };
   } catch (error) {

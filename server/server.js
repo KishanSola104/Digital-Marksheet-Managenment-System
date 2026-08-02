@@ -12,6 +12,9 @@ const academicYearRoute = require('./routes/academicYearRoute');
 const subjectRoute = require('./routes/subjectRoute');
 const classSubjectRoute = require('./routes/classSubjectRoute');
 
+// Kishan Import Seeder
+const seedRoles = require("./seeders/roleSeeder");
+
 const corsOptions = {
     origin: ['http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],      
@@ -29,7 +32,8 @@ app.use(express.json());
 
 //DB Connection
 connectDB();
-
+ 
+seedRoles(); 
 
 
 app.get('/', (req, res) => {
@@ -40,7 +44,7 @@ app.get('/', (req, res) => {
 //Routes
 
 app.use("/api/employees", employeeRoute);
-app.use("/api/login", userRoute);
+// app.use("/api/login", userRoute);
 app.use("/api/students", studentRoute);
 app.use("/api/roles", roleRoutes);
 app.use("/api/classes", classRoute);
