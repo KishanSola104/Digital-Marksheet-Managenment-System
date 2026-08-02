@@ -8,18 +8,18 @@ function RoleSelect({
   disabled = false,
 }) {
   const roleOptions = [
-    {
-      value: "",
-      label: "-- Select Role --",
-    },
-    ...roles.map((role) => ({
-      value: String(role.roleId), 
-      label: role.roleName
-        .replaceAll("_", " ")
-        .toLowerCase()
-        .replace(/\b\w/g, (char) => char.toUpperCase()),
-    })),
-  ];
+  {
+    value: "",
+    label: "-- Select Role --",
+  },
+  ...roles.map((role) => ({
+    value: role.roleCode,
+    label: role.roleName
+      .replaceAll("_", " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase()),
+  })),
+];
 
   return (
     <Select

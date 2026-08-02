@@ -20,7 +20,6 @@ const handleApiError = (error) => {
 
 // Register School
 export const registerSchool = async (schoolData) => {
-  console.log(import.meta.env.VITE_BACKEND_API_URL);
   try {
     const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/register-school", schoolData);
     return response.data;
@@ -58,7 +57,7 @@ export const employeeLogin = async (loginData) => {
   try {
     console.log(loginData);
     
-    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/login", loginData);
+    const response = await api.post(import.meta.env.VITE_BACKEND_API_URL+"/auth/employee-login", loginData);
     return response.data;
   } catch (error) {
     handleApiError(error);

@@ -17,6 +17,9 @@ const schoolRegistrationTemplate = require("./emailTemplates/schoolRegistrationT
 const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
 const forgotPasswordTemplate = require("./emailTemplates/forgotPasswordTemplate");
 
+/* import role model */
+const Role = require("../models/roleModel");
+
 const registerSchool = async (data) => {
   try {
     const {
@@ -139,28 +142,34 @@ const registerSchool = async (data) => {
 
       designation,
 
-      role: [1],
-
       status: "Active",
     });
+
+    // find admin role
+    const adminRole = await Role.findOne({
+      roleCode: "ADMIN",
+    });
+
+    if (!adminRole) {
+      throw new Error("Administrator role not found.");
+    }
 
     // ============================
     // Create User
     // ============================
     const user = await User.create({
+      employeeId: employee._id,
+
       userId,
 
       userName: `${firstName} ${lastName}`,
 
-      roleIds: [1],
-
-      employeeId: employee._id,
+      roleIds: [adminRole._id],
 
       password: hashedAdminPassword,
 
-      status: "Active",
+      accountStatus: "Active",
     });
-
     // ============================
     // Send Email
     // ============================
@@ -210,6 +219,8 @@ const registerSchool = async (data) => {
     // ============================
     // Response
     // ============================
+
+    console.log("Registration completed successfully");
 
     return {
       success: true,
@@ -387,7 +398,7 @@ const verifySchool = async (user) => {
  */
 const employeeLogin = async (data) => {
   try {
-    const { userId, password } = data;
+    const { userId, password, role } = data;
 
     // ==========================
     // Find User
@@ -395,12 +406,9 @@ const employeeLogin = async (data) => {
 
     const user = await User.findOne({
       userId: userId.toUpperCase(),
-    }).populate("employeeId");
-
-
-    const emp = await Employee.findOne({
-      employeeId: userId.toUpperCase()
-    }).populate("employeeId");
+    })
+      .populate("employeeId")
+      .populate("roleIds");
 
     if (!user) {
       throw new Error("Invalid User ID or Password.");
@@ -410,7 +418,7 @@ const employeeLogin = async (data) => {
     // Check User Status
     // ==========================
 
-    if (user.status !== "Active") {
+    if (user.accountStatus !== "Active") {
       throw new Error("Your account is inactive.");
     }
 
@@ -418,24 +426,43 @@ const employeeLogin = async (data) => {
     // Compare Password
     // ==========================
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isPasswordCorrect) {
       throw new Error("Invalid User ID or Password.");
     }
 
     // ==========================
+    // Check Selected Role
+    // ==========================
+
+    const selectedRole = user.roleIds.find(
+      (r) => r.roleCode === role
+    );
+
+    if (!selectedRole) {
+      throw new Error(
+        "You are not authorized to login with the selected role."
+      );
+    }
+
+    // ==========================
     // Generate JWT
     // ==========================
-    // console.log("here:"+emp.schoolId);
+
     const token = generateEmployeeToken({
       _id: user.employeeId._id,
 
       employeeId: user.employeeId.employeeId,
 
-      schoolId:emp.schoolId,
+      schoolId: user.employeeId.schoolId,
 
-      roleIds: user.roleIds,
+      roleId: selectedRole._id,
+
+      roleCode: selectedRole.roleCode,
     });
 
     // ==========================
@@ -450,16 +477,38 @@ const employeeLogin = async (data) => {
       token,
 
       user: {
+        id: user._id,
+
         userId: user.userId,
 
         userName: user.userName,
 
-        roleIds: user.roleIds,
+        accountStatus: user.accountStatus,
 
-        status: user.status,
+        role: {
+          id: selectedRole._id,
+          code: selectedRole.roleCode,
+          name: selectedRole.roleName,
+        },
       },
 
-      employee: user.employeeId,
+      employee: {
+        id: user.employeeId._id,
+
+        employeeId: user.employeeId.employeeId,
+
+        firstName: user.employeeId.firstName,
+
+        lastName: user.employeeId.lastName,
+
+        designation: user.employeeId.designation,
+
+        department: user.employeeId.department,
+
+        schoolId: user.employeeId.schoolId,
+
+        email: user.employeeId.email,
+      },
     };
   } catch (error) {
     throw error;
@@ -555,7 +604,6 @@ const changePassword = async (user, data) => {
     const existingUser = await User.findOne({
       employeeId: user.id,
     });
-
 
     if (!existingUser) {
       throw new Error("User not found.");

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import useAuth from "../../hooks/useAuth";
-import { formatRole } from "../../utils/formatRole";
 
 function UserCard({ isCollapsed = false }) {
     /*
@@ -12,8 +11,7 @@ function UserCard({ isCollapsed = false }) {
 
     const { user, basePath } = useAuth();
 
-    // Temporary (remove after testing)
-    console.log("Logged In User :", user);
+    console.log("UserCard user:", user);
 
     /*
     -----------------------------------------
@@ -23,7 +21,7 @@ function UserCard({ isCollapsed = false }) {
 
     const name = user?.userName || "Unknown User";
     const employeeId = user?.employeeId || "";
-    const role = formatRole(user?.role);
+    const role = user?.role?.name || "";
     const avatar = user?.profileImage || "";
 
     /*

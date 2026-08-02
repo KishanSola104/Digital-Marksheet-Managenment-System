@@ -7,8 +7,9 @@ const employeeSchema = new mongoose.Schema(
       unique: true,
       required: true,
       trim: true,
+      uppercase: true,
     },
-    
+
     schoolId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "School",
@@ -76,14 +77,6 @@ const employeeSchema = new mongoose.Schema(
       default: null,
     },
 
-    // Used for Authentication & Authorization
-    role: {
-      type: [Number],
-      required: true,
-      default: [],
-    },
-
-    // Used for Display
     designation: {
       type: String,
       required: true,
@@ -109,7 +102,7 @@ const employeeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = mongoose.model("Employee", employeeSchema);

@@ -28,7 +28,7 @@ function SidebarHeader({
                     </h2>
 
                     <p className="truncate text-sm text-blue-400">
-                        {role}
+                        {role?.name}
                     </p>
 
                 </div>
