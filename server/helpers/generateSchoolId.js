@@ -1,4 +1,4 @@
-const Counter = require("../../models/counterModel");
+const Counter = require("../models/counterModel");
 
 const RANDOM_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

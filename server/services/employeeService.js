@@ -1,11 +1,11 @@
 const employeeModel = require('../models/employeeModel');
 const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
-const generateUserId = require("./helpers/generateUserId");
+const generateUserId = require("../helpers/generateUserId");
 const schoolModel = require('../models/schoolModel');
 const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
 const { sendEmail } = require("./emailService");
-const generatePassword = require("./helpers/generatePassword");
+const generatePassword = require("../helpers/generatePassword");
 const User = require("../models/userModel");
 const employeeService = {
 

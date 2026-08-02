@@ -2,30 +2,13 @@ const mongoose = require("mongoose");
 
 const roleSchema = new mongoose.Schema(
   {
-    roleCode: {
-      type: String,
-      required: true,
-      unique: true,
-      uppercase: true,
-      trim: true,
-    },
+    roleCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
 
-    roleName: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
+    roleName: { type: String, required: true, unique: true, trim: true },
 
-    description: {
-      type: String,
-      default: null,
-    },
+    description: { type: String, default: null },
 
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
+    isActive: { type: Boolean, default: true }
   },
   {
     timestamps: true,

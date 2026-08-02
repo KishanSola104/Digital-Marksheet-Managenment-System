@@ -5,9 +5,9 @@ const School = require("../models/schoolModel");
 const Employee = require("../models/employeeModel");
 const User = require("../models/userModel");
 
-const generateSchoolId = require("./helpers/generateSchoolId");
-const generateUserId = require("./helpers/generateUserId");
-const generatePassword = require("./helpers/generatePassword");
+const generateSchoolId = require("../helpers/generateSchoolId");
+const generateUserId = require("../helpers/generateUserId");
+const generatePassword = require("../helpers/generatePassword");
 
 const { generateEmployeeToken, generateSchoolToken } = require("../config/jwt");
 
