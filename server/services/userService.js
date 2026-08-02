@@ -7,12 +7,12 @@ const { getRole } = require("./roleService");
 
 const login = async (loginData) => {
   try {
-    let { userId, password, cnfPass, role } = loginData;
+    let { userId, password, role } = loginData;
     role = Number(role);
-    // console.log(role);
     const emp = await Employee.findOne({
       employeeId: userId.toUpperCase(),
     });
+    // console.log(emp);
 
     const data = await employeeService.getEmployeeById(userId);
 
@@ -84,13 +84,6 @@ const login = async (loginData) => {
     // ==========================
     // FIRST TIME LOGIN
     // ==========================
-
-    if (password !== cnfPass) {
-      return {
-        success: false,
-        message: "Password and Confirm Password don't match",
-      };
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

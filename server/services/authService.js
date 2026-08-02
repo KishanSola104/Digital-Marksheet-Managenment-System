@@ -601,9 +601,8 @@ const changePassword = async (user, data) => {
     // ==========================
     // Find User
     // ==========================
-
     const existingUser = await User.findOne({
-      employeeId: user._id,
+      employeeId: user.id,
     });
 
     if (!existingUser) {
