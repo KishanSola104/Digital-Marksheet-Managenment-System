@@ -193,7 +193,7 @@ function SchoolRegisterWizard() {
         return null;
     }
   };
-
+  // console.log(formData);
   return (
     <div className="mx-auto w-full max-w-4xl">
 

@@ -6,30 +6,30 @@ const authenticate = require("../middlewares/authMiddleware");
 const authorize = require("../middlewares/authorize");
 
 // Create Employee
-router.post("/",authenticate,authorize(1), employeeController.createEmployee);
+router.post("/",authenticate,authorize("ADMIN"), employeeController.createEmployee);
 
 // Get All Employees
-router.get("/", authenticate, authorize(1), employeeController.getEmployee);
+router.get("/", authenticate, authorize("ADMIN"), employeeController.getEmployee);
 
 // Get Employee By Employee ID
-router.get("/get/:id", authenticate, authorize(1), employeeController.getEmployeeById);
+router.get("/get/:id", authenticate, authorize("ADMIN"), employeeController.getEmployeeById);
 
 // Get Employee By Name
-router.get("/getByName/:name", authenticate, authorize(1), employeeController.getEmployeeByName);
+router.get("/getByName/:name", authenticate, authorize("ADMIN"), employeeController.getEmployeeByName);
 
 // Update Employee
-router.put("/update/:id", authenticate, authorize(1), employeeController.updateEmployeeById);
+router.put("/update/:id", authenticate, authorize("ADMIN"), employeeController.updateEmployeeById);
 
 // Delete Employee
-router.delete("/delete/:id", authenticate, authorize(1), employeeController.deleteById);
+router.delete("/delete/:id", authenticate, authorize("ADMIN"), employeeController.deleteById);
 
 // Activate / Deactivate Employee
-router.patch("/status/:id", authenticate, authorize(1), employeeController.statusChangeById);
+router.patch("/status/:id", authenticate, authorize("ADMIN"), employeeController.statusChangeById);
 
 //Get Employee By Email
-router.get("/email/:email", authenticate, authorize(1), employeeController.getEmployeesByEmail);
+router.get("/email/:email", authenticate, authorize("ADMIN"), employeeController.getEmployeesByEmail);
 
 // Get Employee By Role
-router.get("/role/:roleId", authenticate, authorize(1), employeeController.getEmployeesByRole);
+router.get("/role/:roleId", authenticate, authorize("ADMIN"), employeeController.getEmployeesByRole);
 
 module.exports = router;

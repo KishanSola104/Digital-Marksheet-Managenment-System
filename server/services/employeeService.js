@@ -45,15 +45,16 @@ const employeeService = {
                 }),
             });
 
-            
+            // console.log(employeeData.role);
 
             user = await User.create({
                 userId: employee.employeeId,
                 userName: employee.firstName,
                 password: hashedPassword,
-                roleIds: employee.role,
+                // might possible to chnage from id to names
+                roleIds: employeeData.role,
                 employeeId: employee._id,
-                status: "Active",
+                status: "Active",   
             });
 
 

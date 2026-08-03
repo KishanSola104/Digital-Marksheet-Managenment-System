@@ -136,7 +136,8 @@ function LoginForm() {
   if (forgotPassword) {
     return <ForgotPasswordForm onBack={() => setForgotPassword(false)} />;
   }
-
+  
+  // console.log(role);
   return (
     <div className="w-full">
       <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
@@ -160,6 +161,8 @@ function LoginForm() {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           />
+          
+          
         </FormField>
 
         {/* Email */}

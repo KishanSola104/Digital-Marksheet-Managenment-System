@@ -25,7 +25,7 @@ const generateEmployeeToken = (employee) => {
         {
             _id: employee._id,
             employeeId: employee.employeeId,
-            roleIds: employee.roleIds,
+            roleId: employee.roleId,
             type: "employee",
             schoolId:employee.schoolId,
         },

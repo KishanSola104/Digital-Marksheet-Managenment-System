@@ -12,13 +12,12 @@ const generatePassword = require("../helpers/generatePassword");
 const { generateEmployeeToken, generateSchoolToken } = require("../config/jwt");
 
 const { sendEmail } = require("./emailService");
-
+const Role = require("../models/roleModel");
 const schoolRegistrationTemplate = require("./emailTemplates/schoolRegistrationTemplate");
 const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
 const forgotPasswordTemplate = require("./emailTemplates/forgotPasswordTemplate");
 
 /* import role model */
-const Role = require("../models/roleModel");
 
 const registerSchool = async (data) => {
   try {
@@ -163,7 +162,7 @@ const registerSchool = async (data) => {
       userId,
 
       userName: `${firstName} ${lastName}`,
-
+      //  why id 
       roleIds: [adminRole._id],
 
       password: hashedAdminPassword,
@@ -399,7 +398,6 @@ const verifySchool = async (user) => {
 const employeeLogin = async (data) => {
   try {
     const { userId, password, role } = data;
-
     // ==========================
     // Find User
     // ==========================
@@ -452,15 +450,16 @@ const employeeLogin = async (data) => {
     // ==========================
     // Generate JWT
     // ==========================
-
+  
     const token = generateEmployeeToken({
       _id: user.employeeId._id,
 
       employeeId: user.employeeId.employeeId,
 
       schoolId: user.employeeId.schoolId,
-
-      roleId: selectedRole._id,
+      // small changes now role code will be used no mongo otherwise the id will need to be check
+      // in the middleware which is not reliable
+      roleId: selectedRole.roleCode,
 
       roleCode: selectedRole.roleCode,
     });

@@ -1,5 +1,4 @@
 const Role = require("../models/roleModel");
-
 const roles = [
   {
     roleCode: "ADMIN",
