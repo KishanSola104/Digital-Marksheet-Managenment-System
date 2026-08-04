@@ -10,7 +10,7 @@ const subjectSchema = new mongoose.Schema(
 
         description: { type: String, default: null, trim: true },
 
-        passingMarks: { type: Number, required: true, min: 0 },
+        // passingMarks: { type: Number, required: true, min: 0 },
 
         status: { type: String, enum: ["Active", "Inactive"], default: "Active" }
     },

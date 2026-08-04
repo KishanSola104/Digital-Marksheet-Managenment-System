@@ -169,6 +169,7 @@ const registerSchool = async (data) => {
 
       accountStatus: "Active",
     });
+
     // ============================
     // Send Email
     // ============================

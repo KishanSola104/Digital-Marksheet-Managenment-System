@@ -5,7 +5,7 @@ const authenticate = require('../middlewares/authMiddleware');
 const authorize = require('../middlewares/authorize');
 
 //Create Class
-router.post('/', authenticate, authorize(1), classController.createClass);
+router.post('/', authenticate, authorize(), classController.createClass);
 
 //Get All Class
 router.get('/', authenticate, authorize(1,2), classController.getAllClass);

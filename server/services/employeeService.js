@@ -51,7 +51,6 @@ const employeeService = {
                 userId: employee.employeeId,
                 userName: employee.firstName,
                 password: hashedPassword,
-                // might possible to chnage from id to names
                 roleIds: employeeData.role,
                 employeeId: employee._id,
                 status: "Active",   
