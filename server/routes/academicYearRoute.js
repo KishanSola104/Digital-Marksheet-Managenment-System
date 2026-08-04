@@ -5,9 +5,9 @@ const authenticate = require('../middlewares/authMiddleware');
 const authorize = require('../middlewares/authorize');
 
 //Create Academic Year
-router.post('/', authenticate,authorize(1), academicYearController.createAcademicYear);
+router.post('/', authenticate,authorize("ADMIN"), academicYearController.createAcademicYear);
 
 //Get All Academic Year
-router.get('/', authenticate, authorize(1), academicYearController.getAllYear);
+router.get('/', authenticate, authorize("ADMIN"), academicYearController.getAllYear);
 
 module.exports = router;
