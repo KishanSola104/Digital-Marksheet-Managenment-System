@@ -11,6 +11,7 @@ const classRoute = require('./routes/classRoute');
 const academicYearRoute = require('./routes/academicYearRoute');
 const subjectRoute = require('./routes/subjectRoute');
 const classSubjectRoute = require('./routes/classSubjectRoute');
+const adminDashboardRoute = require('./routes/adminDashboardRoute');
 
 // Kishan Import Seeder
 const seedRoles = require("./seeders/roleSeeder");
@@ -51,6 +52,7 @@ app.use("/api/classes", classRoute);
 app.use("/api/academic-years", academicYearRoute);
 app.use("/api/subjects", subjectRoute);
 app.use('/api/classSubjects', classSubjectRoute);
+app.use('/api/adminDashboard', adminDashboardRoute);
 
 
 /* Added By Kishan */
