@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const app = express();
 const employeeRoute = require('./routes/employeeRoute');
@@ -12,6 +13,13 @@ const academicYearRoute = require('./routes/academicYearRoute');
 const subjectRoute = require('./routes/subjectRoute');
 const classSubjectRoute = require('./routes/classSubjectRoute');
 const adminDashboardRoute = require('./routes/adminDashboardRoute');
+const { startAcademicYearCron } = require('./jobs/academicYearJob');
+
+// after your DB connection is established
+mongoose.connect(process.env.MONGO_URI).then(() => {
+    console.log('MongoDB connected');
+    startAcademicYearCron(); // <-- add this line
+});
 
 // Kishan Import Seeder
 const seedRoles = require("./seeders/roleSeeder");
@@ -62,5 +70,6 @@ app.use("/api/auth", authRoutes);
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} http://localhost:${PORT}`)
+    console.log(`Server is running on port ${PORT} http://localhost:${PORT}`);
+    startAcademicYearCron();
 });

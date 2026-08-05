@@ -21,7 +21,7 @@ const adminDashboardService = {
             ).distinct('_id');
 
             // Filtered by academicYearId now
-            const classes = await Class.countDocuments({ academicYearId, status: "Active" });
+            const classes = await Class.countDocuments({ status: "Active" });
             const exams = await Exam.countDocuments({ academicYearId, status: "Active" });
             const students = await Student.countDocuments({ academicYearId, status: "Active" });
             const teachers = await User.countDocuments({ roleIds: { $in: teachingRoleIds } });

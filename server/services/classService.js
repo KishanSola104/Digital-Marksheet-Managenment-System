@@ -4,6 +4,7 @@ const classService = {
     //Create Class
     createClass: async (classData) => {
         try{
+            const{classId,standard,maximumCapacity}=classData;
             const classes = await Class.create(classData);
             return{
                 success:true,
