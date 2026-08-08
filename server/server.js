@@ -13,6 +13,7 @@ const academicYearRoute = require('./routes/academicYearRoute');
 const subjectRoute = require('./routes/subjectRoute');
 const classSubjectRoute = require('./routes/classSubjectRoute');
 const adminDashboardRoute = require('./routes/adminDashboardRoute');
+const sectionRoute = require('./routes/sectionRoute');
 const { startAcademicYearCron } = require('./jobs/academicYearJob');
 
 // after your DB connection is established
@@ -61,6 +62,7 @@ app.use("/api/academic-years", academicYearRoute);
 app.use("/api/subjects", subjectRoute);
 app.use('/api/classSubjects', classSubjectRoute);
 app.use('/api/adminDashboard', adminDashboardRoute);
+app.use('/api/sections',sectionRoute);
 
 
 /* Added By Kishan */
