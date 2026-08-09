@@ -27,9 +27,9 @@ const getAllSubject = async (req,res) => {
 };
 
 //Get Subject By SubjectID
-const getById = async (req,res) => {
+const getByCode = async (req,res) => {
     try{
-        const subject = await subjectService.getById(req.params.id);
+        const subject = await subjectService.getByCode(req.params.subjectCode);
         res.status(201).json(subject);
     }catch(error){
         res.status(400).json({
@@ -40,9 +40,9 @@ const getById = async (req,res) => {
 };
 
 //Update Subject By SubjectID
-const updateById = async (req,res) => {
+const updateByCode = async (req,res) => {
     try{
-        const subject = await subjectService.updateById(req.params.id,req.body);
+        const subject = await subjectService.updateByCode(req.params.subjectCode,req.body);
         res.status(201).json(subject);
     }catch(error){
         res.status(400).json({
@@ -53,9 +53,9 @@ const updateById = async (req,res) => {
 };
 
 //Delete Subject By Subject Id
-const deleteById = async (req,res) => {
+const deleteByCode = async (req,res) => {
     try{
-        const subject = await subjectService.deleteById(req.params.id);
+        const subject = await subjectService.deleteByCode(req.params.subjectCode);
         res.status(201).json(subject);
     }catch(error){
         res.status(400).json({
@@ -66,9 +66,9 @@ const deleteById = async (req,res) => {
 };
 
 //Change the Status of Subject By SubjectId
-const changeStatusById = async (req,res) => {
+const changeStatusByCode = async (req,res) => {
     try{
-        const subject = await subjectService.changeStatusById(req.params.id);
+        const subject = await subjectService.changeStatusByCode(req.params.subjectCode);
         res.status(201).json(subject);
     }catch(error){
         res.status(400).json({
@@ -79,4 +79,4 @@ const changeStatusById = async (req,res) => {
 };
 
 
-module.exports = {createSubject, getAllSubject, getById, updateById, deleteById, changeStatusById};
+module.exports = {createSubject, getAllSubject, getByCode, updateByCode, deleteByCode, changeStatusByCode};

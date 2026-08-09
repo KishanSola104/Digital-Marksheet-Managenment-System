@@ -1,10 +1,10 @@
 const Subject = require('../models/subjectModel');
-const { changeStatusById } = require('./classService');
 
 const subjectService = {
     //create Subject
     createSubject: async (data) => {
         try{
+            const{subjectCode, subjectName, description, maximumMarks, passingMarks} = data;
             const subject = await Subject.create(data);
             return{
                 success:true,
@@ -30,10 +30,10 @@ const subjectService = {
         }
     },
 
-    //Get Subject By SubjectId
-    getById: async (id) => {
+    //Get Subject By SubjectCode
+    getByCode: async (subjectCode) => {
         try{
-            const subject = await Subject.findOne({subjectId:id});
+            const subject = await Subject.findOne({subjectCode:subjectCode});
             if(!subject){
                 throw new Error("Subject Not Found");
             }
@@ -47,11 +47,11 @@ const subjectService = {
         }
     },
 
-    //Update Subject By SubjectId
-    updateById: async (id,updateData) => {
+    //Update Subject By SubjectCode
+    updateByCode: async (subjectCode,updateData) => {
         try{
             const subject = await Subject.findOneAndUpdate(
-                {subjectId:id},
+                {subjectCode:subjectCode},
                 {$set:updateData},
                 {returnDocument:'after'}
             );
@@ -69,10 +69,10 @@ const subjectService = {
     },
 
 
-    //Delete Subject By SubjectID
-    deleteById: async (id) => {
+    //Delete Subject By SubjectCode
+    deleteByCode: async (subjectCode) => {
         try{
-            const subject = await Subject.findOneAndDelete({subjectId:id});
+            const subject = await Subject.findOneAndDelete({subjectCode:subjectCode});
             if(!subject){
                 throw new Error("Subject Not Found");
             }
@@ -85,10 +85,10 @@ const subjectService = {
         }
     },
 
-    //Change the Status of Subject By SubjectId(Active or Inactive)
-    changeStatusById: async (id) => {
+    //Change the Status of Subject By SubjectCode(Active or Inactive)
+    changeStatusByCode: async (subjectCode) => {
         try{
-            const subject = await Subject.findOne({subjectId:id});
+            const subject = await Subject.findOne({subjectCode:subjectCode});
             if(!subject){
                 throw new Error("Subject Not Found");
             }

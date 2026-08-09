@@ -10,17 +10,17 @@ router.post('/', authenticate,authorize("ADMIN","HEAD_TEACHER"), subjectControll
 //Get All Subject
 router.get('/', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.getAllSubject);
 
-//Get Subject By SubjectId
-router.get('/:id', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.getById);
+//Get Subject By SubjectCode
+router.get('/:subjectCode', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.getByCode);
 
-//Update Subject By SubjectId
-router.put('/:id', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.updateById);
+//Update Subject By SubjectCode
+router.put('/:subjectCode', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.updateByCode);
 
-//Delete Subject By SubjectId
-router.delete('/:id', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.deleteById);
+//Delete Subject By SubjectCode
+router.delete('/:subjectCode', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.deleteByCode);
 
-//Change the status of Subject By SubjectId
-router.patch('/status/:id', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.changeStatusById);
+//Change the status of Subject By SubjectCode
+router.patch('/:subjectCode', authenticate, authorize("ADMIN","HEAD_TEACHER"), subjectController.changeStatusByCode);
 
 
 module.exports = router;

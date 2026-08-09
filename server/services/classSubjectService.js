@@ -1,5 +1,4 @@
 const ClassSubject = require('../models/classSubjectModel');
-const { changeStatusById } = require('./classService');
 
 const classSubjectService = {
     //Create Class Subject
@@ -19,7 +18,7 @@ const classSubjectService = {
     //Get All Class Subject
     getAllClassSubject: async () => {
         try{
-            const classSub = await ClassSubject.find();
+            const classSub = await ClassSubject.find().populate("classId","classId standard").populate("sectionId","sectionId section").populate("subjectId","subjectCode subjectName").populate("subjectTeacherId","employeeId firstName email gender");
             return{
                 success:true,
                 message:"All Class Subject Fetched Successfully",
