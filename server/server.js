@@ -59,10 +59,10 @@ app.use("/api/students", studentRoute);
 app.use("/api/roles", roleRoutes);
 app.use("/api/classes", classRoute);
 app.use("/api/academic-years", academicYearRoute);
-app.use("/api/subjects", subjectRoute);
-app.use('/api/classSubjects', classSubjectRoute);
+app.use("/api/admin/subjects", subjectRoute);
+app.use('/api/admin/class-subjects', classSubjectRoute);
 app.use('/api/adminDashboard', adminDashboardRoute);
-app.use('/api/sections',sectionRoute);
+app.use('/api/admin/sections',sectionRoute);
 
 
 /* Added By Kishan */
