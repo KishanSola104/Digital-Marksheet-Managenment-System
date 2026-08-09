@@ -62,7 +62,7 @@ app.use("/api/academic-years", academicYearRoute);
 app.use("/api/subjects", subjectRoute);
 app.use('/api/classSubjects', classSubjectRoute);
 app.use('/api/adminDashboard', adminDashboardRoute);
-app.use('/api/sections',sectionRoute);
+app.use('/api/admin/sections',sectionRoute);
 
 
 /* Added By Kishan */
