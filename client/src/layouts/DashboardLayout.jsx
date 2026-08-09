@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import DashboardShell from "./DashboardShell";
 
@@ -8,43 +8,123 @@ import classTeacherMenu from "../config/menus/classTeacherMenu";
 import subjectTeacherMenu from "../config/menus/subjectTeacherMenu";
 
 import useAuth from "../hooks/useAuth";
+import api from "../services/api";
+
+import { DashboardProvider } from "../context/DashboardContext";
 
 function DashboardLayout() {
-    /*
-    ---------------------------------------------------
-    Authentication
-    ---------------------------------------------------
-    */
 
     const { user } = useAuth();
 
-    /*
-    ---------------------------------------------------
-    Sidebar
-    ---------------------------------------------------
-    */
-
-    // Desktop collapse
+    // Sidebar
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
-    // Mobile drawer
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
+    // Academic Year
+    const [academicYears, setAcademicYears] = useState([]);
+    const [selectedAcademicYear, setSelectedAcademicYear] = useState(null);
+    const [academicYearLoading, setAcademicYearLoading] = useState(true);
+
     /*
     ---------------------------------------------------
-    Academic Year
+    Load Academic Years
     ---------------------------------------------------
     */
 
-    const academicYears = [
-        "2024-25",
-        "2025-26",
-        "2026-27",
-    ];
+    useEffect(() => {
 
-    const [academicYear, setAcademicYear] = useState(
-        academicYears[1]
-    );
+        const loadAcademicYears = async () => {
+
+            try {
+
+                setAcademicYearLoading(true);
+
+                const response = await api.get("/academic-years");
+
+                console.log(
+                    "Academic Year API Response:",
+                    response.data
+                );
+
+                if (response.data?.success) {
+
+                    const years = response.data.data || [];
+
+                    console.log(
+                        "Academic Years:",
+                        years
+                    );
+
+                    setAcademicYears(years);
+
+                    /*
+                    Select current year if available.
+                    Otherwise select first available year.
+                    */
+
+                    const defaultYear =
+                        years.find(
+                            (year) => year.isCurrent === true
+                        ) ||
+                        years[0] ||
+                        null;
+
+                    console.log(
+                        "Selected Academic Year:",
+                        defaultYear
+                    );
+
+                    setSelectedAcademicYear(defaultYear);
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Academic Year API Error:",
+                    error
+                );
+
+            } finally {
+
+                setAcademicYearLoading(false);
+
+            }
+        };
+
+        loadAcademicYears();
+
+    }, []);
+
+
+    /*
+    ---------------------------------------------------
+    Academic Year Change
+    ---------------------------------------------------
+    */
+
+    const handleAcademicYearChange = (event) => {
+
+        const selectedId = event.target.value;
+
+        console.log(
+            "Selected Academic Year ID:",
+            selectedId
+        );
+
+        const selectedYear = academicYears.find(
+            (year) => year._id === selectedId
+        );
+
+        console.log(
+            "Selected Academic Year Object:",
+            selectedYear
+        );
+
+        setSelectedAcademicYear(
+            selectedYear || null
+        );
+    };
+
 
     /*
     ---------------------------------------------------
@@ -75,22 +155,47 @@ function DashboardLayout() {
 
     }, [user?.role?.code]);
 
+
+    /*
+    ---------------------------------------------------
+    Dashboard Context
+    ---------------------------------------------------
+    */
+
+    const dashboardContextValue = {
+        academicYears,
+        selectedAcademicYear,
+        academicYearLoading,
+        handleAcademicYearChange,
+    };
+
+
     return (
-        <DashboardShell
-            menu={menu}
+        <DashboardProvider value={dashboardContextValue}>
 
-            isSidebarCollapsed={isSidebarCollapsed}
-            setIsSidebarCollapsed={setIsSidebarCollapsed}
+            <DashboardShell
 
-            isMobileSidebarOpen={isMobileSidebarOpen}
-            setIsMobileSidebarOpen={setIsMobileSidebarOpen}
+                menu={menu}
 
-            academicYear={academicYear}
-            academicYears={academicYears}
-            onAcademicYearChange={(e) =>
-                setAcademicYear(e.target.value)
-            }
-        />
+                isSidebarCollapsed={isSidebarCollapsed}
+                setIsSidebarCollapsed={setIsSidebarCollapsed}
+
+                isMobileSidebarOpen={isMobileSidebarOpen}
+                setIsMobileSidebarOpen={setIsMobileSidebarOpen}
+
+                academicYear={
+                    selectedAcademicYear?._id || ""
+                }
+
+                academicYears={academicYears}
+
+                onAcademicYearChange={
+                    handleAcademicYearChange
+                }
+
+            />
+
+        </DashboardProvider>
     );
 }
 
