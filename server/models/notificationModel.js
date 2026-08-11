@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema(
     {
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
+        
         notificationId: { type: String, unique: true, required: true },
 
         receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

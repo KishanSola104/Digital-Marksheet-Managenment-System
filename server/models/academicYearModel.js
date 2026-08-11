@@ -4,6 +4,8 @@ const academicYearSchema = new mongoose.Schema(
     {
         academicYearId: { type: String, unique: true, required: true, trim: true },
 
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
+
         year: { type: String, unique: true, required: true, trim: true },
 
         startDate: { type: Date, required: true },

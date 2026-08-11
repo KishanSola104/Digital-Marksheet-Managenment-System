@@ -4,6 +4,8 @@ const auditLogSchema = new mongoose.Schema(
     {
         auditLogId: { type: String, unique: true, required: true },
 
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
+
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
         action: { type: String, enum: ["CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT", "PASSWORD_CHANGE", "STATUS_CHANGE"], required: true },

@@ -4,6 +4,8 @@ const sectionSchema = new mongoose.Schema(
     {
         sectionId: { type: String, unique: true, required: true },
 
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
+        
         classId: { type: mongoose.Schema.Types.ObjectId, ref: "Class", required: true },
 
         section: { type: String, required: true, trim: true, uppercase: true },

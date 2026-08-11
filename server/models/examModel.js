@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const examSchema = new mongoose.Schema(
     {
+        schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
+        
         examId: { type: String, unique: true, required: true, trim: true },
 
         examName: { type: String, required: true, trim: true },

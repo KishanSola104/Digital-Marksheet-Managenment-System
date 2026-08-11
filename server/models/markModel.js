@@ -7,6 +7,8 @@ const markSchema = new mongoose.Schema(
         unique: true,
         required: true
     },
+    
+    schoolId : {type: mongoose.Schema.Types.ObjectId,ref:"School"},
 
     studentId: {
         type: mongoose.Schema.Types.ObjectId,
