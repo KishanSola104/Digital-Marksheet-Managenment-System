@@ -8,7 +8,7 @@ const authorize = require("../middlewares/authorize");
 // Create Employee
 router.post("/",authenticate,authorize("ADMIN"), employeeController.createEmployee);
 
-// Get All Employees
+// Get All Employees By SchoolId
 router.get("/", authenticate, authorize("ADMIN"), employeeController.getEmployee);
 
 // Get Employee By Employee ID

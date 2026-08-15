@@ -16,10 +16,10 @@ const createEmployee = async (req, res) => {
 };
 
 
-//Fetch All
+//Get All Employees By SchoolId
 const getEmployee = async (req,res) => {
     try{
-        const employee = await employeeService.getEmployee();
+        const employee = await employeeService.getEmployee(req.user.schoolId);
         res.status(201).json(employee);
     } catch(error){
         res.status(400).json({
@@ -32,7 +32,7 @@ const getEmployee = async (req,res) => {
 //Fetch By Id
 const getEmployeeById = async (req,res) => {
     try{
-        const employee = await employeeService.getEmployeeById(req.params.id);
+        const employee = await employeeService.getEmployeeById(req.params.id,req.user.schoolId);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
@@ -45,7 +45,7 @@ const getEmployeeById = async (req,res) => {
 //Fetch By Name
 const getEmployeeByName = async (req,res) => {
     try{
-        const employee = await employeeService.getEmployeeByName(req.params.name);
+        const employee = await employeeService.getEmployeeByName(req.params.name,req.user.schoolId);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
@@ -58,7 +58,7 @@ const getEmployeeByName = async (req,res) => {
 //Update By Id
 const updateEmployeeById = async (req,res) => {
     try{
-        const employee = await employeeService.updateEmployeeById(req.params.id,req.body);
+        const employee = await employeeService.updateEmployeeById(req.params.id,req.body,req.user.schoolId);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
@@ -71,7 +71,7 @@ const updateEmployeeById = async (req,res) => {
 //Delete By Id
 const deleteById = async (req, res) => {
     try {
-        const result = await employeeService.deleteById(req.params.id);
+        const result = await employeeService.deleteById(req.params.id,req.user.schoolId);
 
         res.status(200).json(result);
 
@@ -86,7 +86,7 @@ const deleteById = async (req, res) => {
 //Status Change Active or Deactive
 const statusChangeById = async (req,res) => { 
     try{
-        const employee = await employeeService.statusChangeById(req.params.id);
+        const employee = await employeeService.statusChangeById(req.params.id,req.user.schoolId);
         res.status(201).json(employee);
     }catch(error){
         res.status(400).json({
@@ -99,7 +99,7 @@ const statusChangeById = async (req,res) => {
 //Get Employees By Email
 const getEmployeesByEmail = async (req,res) => {
     try{
-        const employee = await employeeService.getEmployeesByEmail(req.params.email);
+        const employee = await employeeService.getEmployeesByEmail(req.params.email,req.user.schoolId);
         res.status(200).json(employee);
     }catch(error){
         res.status(400).json({
@@ -112,7 +112,7 @@ const getEmployeesByEmail = async (req,res) => {
 //Get Employees By Role
 const getEmployeesByRole = async (req, res) => {
     try {
-        const result = await employeeService.getEmployeesByRole(req.params.roleId);
+        const result = await employeeService.getEmployeesByRole(req.params.roleId,req.user.schoolId);
 
         if (!result.success) {
             return res.status(404).json(result);

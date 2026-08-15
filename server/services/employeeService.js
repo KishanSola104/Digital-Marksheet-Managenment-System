@@ -6,7 +6,7 @@ const schoolModel = require('../models/schoolModel');
 const employeeCredentialsTemplate = require("./emailTemplates/employeeCredentialsTemplate");
 const { sendEmail } = require("./emailService");
 const generatePassword = require("../helpers/generatePassword");
-const User = require("../models/userModel");
+const userModel = require("../models/userModel");
 const employeeService = {
 
     //Create Employee
@@ -30,7 +30,7 @@ const employeeService = {
                 subject: "Account Created",
 
                 html: employeeCredentialsTemplate({
-                
+
                     employeeName: `${employee.firstName} ${employee.lastName}`,
 
                     employeeId: employee.employeeId,
@@ -39,7 +39,7 @@ const employeeService = {
 
                     designation: employee.designation,
 
-                    password : password,
+                    password: password,
 
                     loginUrl: `${process.env.CLIENT_URL}/login`,
                 }),
@@ -53,7 +53,7 @@ const employeeService = {
                 password: hashedPassword,
                 roleIds: employeeData.role,
                 employeeId: employee._id,
-                status: "Active",   
+                status: "Active",
             });
 
 
@@ -67,43 +67,52 @@ const employeeService = {
         }
     },
 
-    //Get All Employee
-    getEmployee: async () => {
+    //Get All Employee by SchoolId
+    getEmployee: async (schoolId) => {
         try {
 
-            const employees = await employeeModel.find();
+            if (!schoolId) {
+                throw new Error("School Id is not found");
+            }
+
+            const employees = await employeeModel.find({ schoolId: schoolId }).populate("schoolId", "schoolName email phone");
+
             return {
                 success: true,
-                message: "Employees Fetched",
+                message: "Employees Fetched by SchoolId",
                 employees: employees
             };
+
         } catch (error) {
             throw new Error(`Error Fetching: ${error.message}`);
         }
     },
 
     //Get by Id
-    getEmployeeById: async (userId) => {
+    getEmployeeById: async (userId, schoolId) => {
         try {
-            const employee = await employeeModel.findOne({ employeeId: userId });
+            const employee = await employeeModel.findOne({ employeeId: userId, schoolId: schoolId });
+
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
+
             return {
                 success: true,
                 message: "Employee Fetched",
                 employee: employee
             };
+
         } catch (error) {
             throw new Error(`Error While Fetching Employee: ${error.message}`);
         }
     },
 
     //Get by Name
-    getEmployeeByName: async (name) => {
+    getEmployeeByName: async (name, schoolId) => {
         try {
 
-            const employee = await employeeModel.findOne({ firstName: name });
+            const employee = await employeeModel.findOne({ firstName: name, schoolId: schoolId });
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
@@ -118,10 +127,10 @@ const employeeService = {
     },
 
     //Update by Id
-    updateEmployeeById: async (id, updateData) => {
+    updateEmployeeById: async (id, updateData, schoolId) => {
         try {
             const employee = await employeeModel.findOneAndUpdate(
-                { employeeId: id },
+                { employeeId: id, schoolId: schoolId },
                 { $set: updateData },
                 { returnDocument: 'after' }
             );
@@ -139,12 +148,10 @@ const employeeService = {
     },
 
     //Delete By Id
-    deleteById: async (id) => {
+    deleteById: async (id, schoolId) => {
         try {
 
-            const employee = await employeeModel.findOneAndDelete({
-                employeeId: id
-            });
+            const employee = await employeeModel.findOneAndDelete({ employeeId: id, schoolId: schoolId });
 
             if (!employee) {
                 throw new Error("Employee Not Found");
@@ -161,9 +168,9 @@ const employeeService = {
     },
 
     //Status Change Active or Deactive
-    statusChangeById: async (id, status) => {
+    statusChangeById: async (id, schoolId) => {
         try {
-            const employee = await employeeModel.findOne({ employeeId: id });
+            const employee = await employeeModel.findOne({ employeeId: id, schoolId: schoolId });
             if (!employee) {
                 throw new Error("Employee Not Found");
             }
@@ -180,9 +187,9 @@ const employeeService = {
     },
 
     // Get Employee By Email
-    getEmployeesByEmail: async (email) => {
+    getEmployeesByEmail: async (email, schoolId) => {
         try {
-            const employee = await employeeModel.findOne({ email: email });
+            const employee = await employeeModel.findOne({ email: email, schoolId: schoolId });
 
             if (!employee) {
                 throw new Error("Employee Not Found");
@@ -199,14 +206,32 @@ const employeeService = {
     },
 
     //Get Employee By Role
-    getEmployeesByRole: async (roleId) => {
+    getEmployeesByRole: async (roleId, schoolId) => {
         try {
-            const employees = await employeeModel.find({ role: roleId });
+
+            // 1. Find users having this role
+            const users = await userModel.find({roleIds: roleId}).select("employeeId");
+
+            if (users.length === 0) {
+                return {
+                    success: false,
+                    message: "No employees found for this role."
+                };
+            }
+
+            // 2. Get employee IDs
+            const employeeIds = users.map(user => user.employeeId);
+
+            // 3. Find employees belonging to this school
+            const employees = await employeeModel.find({
+                _id: { $in: employeeIds },
+                schoolId: schoolId
+            });
 
             if (employees.length === 0) {
                 return {
                     success: false,
-                    message: "No employees found for this role."
+                    message: "No employees found for this role in this school."
                 };
             }
 

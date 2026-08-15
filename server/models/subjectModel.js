@@ -8,11 +8,7 @@ const subjectSchema = new mongoose.Schema(
 
         subjectName: { type: String, unique: true, required: true, trim: true },
 
-        description: { type: String, default: null, trim: true },
-
-        maximumMarks: { type: Number, required: true },
-
-        passingMarks: { type: Number, required: true, min: 0 },
+        category: { type: String, enum: ["Academic","Co_Curricular"], required:true},
 
         status: { type: String, enum: ["Active", "Inactive"], default: "Active" }
     },

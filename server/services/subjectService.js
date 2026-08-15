@@ -4,7 +4,7 @@ const subjectService = {
     //create Subject
     createSubject: async (data) => {
         try{
-            const{subjectCode, subjectName, description, maximumMarks, passingMarks} = data;
+            const{schoolId, subjectCode, subjectName, category} = data;
             const subject = await Subject.create(data);
             return{
                 success:true,
