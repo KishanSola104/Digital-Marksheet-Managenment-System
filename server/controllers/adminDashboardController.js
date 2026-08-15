@@ -4,9 +4,7 @@ const adminDashboardService = require('../services/adminDashboardService');
 const getDashboardStats = async (req, res) => {
     try {
 
-        const stats = await adminDashboardService.getDashboardStats(
-            req.params.academicYearId
-        );
+        const stats = await adminDashboardService.getDashboardStats(req.params.academicYearId,req.user.schoolId);
 
         res.status(200).json(stats);
 

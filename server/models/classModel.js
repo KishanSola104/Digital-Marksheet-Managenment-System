@@ -4,7 +4,7 @@ const classSchema = new mongoose.Schema(
     {
         schoolId: { type: mongoose.Schema.Types.ObjectId, ref: "School", required: true },
 
-        classId: { type: String, unique: true, required: true, trim: true },
+        classId: { type: String, required: true, trim: true },
 
         standard: { type: String, required: true, trim: true },
 

@@ -3,7 +3,7 @@ const sectionService = require('../services/sectionService');
 //Create Section
 const createSection = async (req,res) => {
     try{
-        const section = await sectionService.createSection(req.body);
+        const section = await sectionService.createSection(req.body,req.user.schoolId);
         res.status(201).json(section);
     }catch(error){
         res.status(500).json({
@@ -16,7 +16,7 @@ const createSection = async (req,res) => {
 //Get All Section By Class Id
 const getAllSection = async (req,res) => {
     try{
-        const sections = await sectionService.getAllSection(req.params.classId);
+        const sections = await sectionService.getAllSection(req.params.classId,req.user.schoolId);
         res.status(200).json(sections);
     }catch(error){
         res.status(400).json({
@@ -29,7 +29,7 @@ const getAllSection = async (req,res) => {
 //Update Section By SectionId
 const updateById = async (req,res) => {
     try{
-        const section = await sectionService.updateById(req.params.sectionId,req.body);
+        const section = await sectionService.updateById(req.params.sectionId,req.body,req.user.schoolId);
         res.status(200).json(section);
     }catch(error){
         res.status(400).json({
@@ -42,7 +42,7 @@ const updateById = async (req,res) => {
 //Change Status By sectionId
 const changeStatusById = async (req,res) => {
     try{
-        const section = await sectionService.changeStatusById(req.params.sectionId);
+        const section = await sectionService.changeStatusById(req.params.sectionId,req.user.schoolId);
         res.status(200).json(section);
     }catch(error){
         res.status(400).json({

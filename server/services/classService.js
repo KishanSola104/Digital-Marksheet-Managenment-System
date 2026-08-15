@@ -2,10 +2,14 @@ const Class = require('../models/classModel');
 
 const classService = {
     //Create Class
-    createClass: async (classData) => {
+    createClass: async (classData,schoolId) => {
         try{
-            const{classId,standard,maximumCapacity}=classData;
-            const classes = await Class.create(classData);
+            const{classId,standard,academicYearId,maximumCapacity}=classData;
+            const existingClass = await Class.findOne({classId,schoolId});
+            if (existingClass) {
+                throw new Error(`ClassId ${classId} already exists`);
+            }
+            const classes = await Class.create({classId,standard,academicYearId,maximumCapacity,schoolId});
             return{
                 success:true,
                 message:"Class created Successfully",
@@ -17,9 +21,9 @@ const classService = {
     },
 
     //Get All Class
-    getAllClass: async () => {
+    getAllClass: async (schoolId) => {
         try{
-            const classes = await Class.find();
+            const classes = await Class.find({schoolId : schoolId});
             return{
                 success:true,
                 message:"All Class Fetched Successfully",
@@ -31,9 +35,9 @@ const classService = {
     },
 
     //Get Class By ClassId
-    getById: async (id) => {
+    getById: async (id,schoolId) => {
         try{
-            const classes = await Class.findOne({classId:id});
+            const classes = await Class.findOne({classId:id, schoolId : schoolId});
             if(!classes){
                 throw new Error("Class Not Found");
             }
@@ -48,10 +52,10 @@ const classService = {
     },
 
     //Update Class By ClassId
-    updateById: async (id,updateData) => {
+    updateById: async (id,updateData,schoolId) => {
         try{
             const classes = await Class.findOneAndUpdate(
-                {classId:id},
+                {classId:id, schoolId : schoolId},
                 {$set:updateData},
                 {returnDocument:'after'}
             );
@@ -70,9 +74,9 @@ const classService = {
 
 
     //Change the Status of Class ("Active" or "Deactive")
-    changeStatusById: async (id) => {
+    changeStatusById: async (id,schoolId) => {
         try{
-            const classes = await Class.findOne({classId:id});
+            const classes = await Class.findOne({classId:id, schoolId : schoolId});
             if(!classes){
                 throw new Error("Class Not Found");
             }
@@ -92,7 +96,7 @@ const classService = {
     //Delete the Class by ClassId
     deleteById: async (id) => {
         try{
-            const classes = await Class.findOneAndDelete({classId:id});
+            const classes = await Class.findOneAndDelete({classId:id, schoolId : schoolId});
             if(!classes){
                 throw new Error("Class Not Found");
             }

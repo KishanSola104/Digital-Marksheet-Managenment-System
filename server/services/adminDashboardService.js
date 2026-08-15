@@ -19,7 +19,7 @@ const officeStaffCodes = [
 const adminDashboardService = {
 
     // Get Dashboard Statistics
-    getDashboardStats: async (academicYearId) => {
+    getDashboardStats: async (academicYearId,schoolId) => {
         try {
 
             const teachingRoleIds = await Role.find(
@@ -41,24 +41,27 @@ const adminDashboardService = {
             // Classes - Selected Academic Year
             const classes = await Class.countDocuments({
                 academicYearId,
+                schoolId:schoolId,
                 status: "Active"
             });
 
             // Exams - Selected Academic Year
             const exams = await Exam.countDocuments({
                 academicYearId,
+                schoolId:schoolId,
                 status: "Active"
             });
 
             // Students - Selected Academic Year
             const students = await Student.countDocuments({
                 academicYearId,
+                schoolId:schoolId,
                 status: "Active"
             });
 
             // Teachers - School Wide
             const teachers = await User.countDocuments({
-                roleIds: { $in: teachingRoleIds }
+                roleIds: { $in: teachingRoleIds },
             });
 
             // Office Staff - School Wide

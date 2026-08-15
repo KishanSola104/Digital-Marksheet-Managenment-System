@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const sectionSchema = new mongoose.Schema(
     {
-        sectionId: { type: String, unique: true, required: true },
+        sectionId: { type: String, required: true },
 
         schoolId: { type: mongoose.Schema.Types.ObjectId, ref:"School", required:true},
         

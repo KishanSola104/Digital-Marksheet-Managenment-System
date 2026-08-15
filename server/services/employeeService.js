@@ -208,8 +208,7 @@ const employeeService = {
     //Get Employee By Role
     getEmployeesByRole: async (roleId, schoolId) => {
         try {
-
-            // 1. Find users having this role
+            //Find users having this role
             const users = await userModel.find({roleIds: roleId}).select("employeeId");
 
             if (users.length === 0) {
@@ -219,10 +218,10 @@ const employeeService = {
                 };
             }
 
-            // 2. Get employee IDs
+            //Get employee IDs
             const employeeIds = users.map(user => user.employeeId);
 
-            // 3. Find employees belonging to this school
+            //Find employees belonging to this school
             const employees = await employeeModel.find({
                 _id: { $in: employeeIds },
                 schoolId: schoolId
